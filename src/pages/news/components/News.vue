@@ -1,0 +1,147 @@
+<template>
+	<div class="page-content">
+      <van-tabs v-model="active" @change="onTabChanged">
+         <van-tab name="latest" title="最新">
+            <NewsItem v-for="(item,index) in newsList" :model="item" :key="index"
+               @selected="onSelected"
+            />
+         </van-tab>
+         <van-tab name="focus" title="關注">
+            <NewsItem v-for="(item,index) in focusNewsList" :model="item" :key="index"
+               @selected="onSelected"
+            />
+         </van-tab>
+         <van-tab name="my" title="我的">
+            <NewsItem v-for="(item,index) in myNewsList" :model="item" :key="index"
+               @selected="onSelected"
+            />
+         </van-tab>
+      </van-tabs>
+      <!-- <div>
+         <ul class="list" v-if="newsList.length">
+            <ArticleItem v-for="(item,index) in newsList" :model="item" :key="index"
+               @selected="onSelected"
+            />
+         </ul>
+      </div> -->
+      <!-- <div :id="newsRefreshId" class="mui-content mui-scroll-wrapper">
+         <div :class="{ 'mui-scroll': true, 'broswer-content': !isPlus }" id="homeScroller" ref="scrollContent">
+            <ul class="list" v-if="newsList.length">
+               <ArticleItem v-for="(item,index) in newsList" :model="item" :key="index"
+                  @selected="onSelected"
+               />
+            </ul>
+         </div>
+      </div> -->
+   </div>
+</template>
+
+<script>
+import { mapState, mapGetters } from 'vuex';
+import { FETCH_NEWS, GET_NEWS } from '@/store/actions.type';
+import PageManager from 'page-manager';
+import mui from 'mui';
+
+import NewsItem from '@/components/news/Item';
+import { NavBar, Tab, Tabs } from 'vant';
+Vue.use(Tab).use(Tabs);
+
+// import { PULL_REFRESH_UI } from '@/config';
+// import { buildQuery, getElementId, log } from '@/utils';
+
+// import { NavBar } from 'vant';
+// Vue.use(NavBar);
+
+export default {
+   name: 'News',
+   components: {
+		NewsItem
+	},
+   data() {
+      return {
+         active: 0,
+         focusNewsList: [],
+         myNewsList: [],
+      };
+   },
+   computed: {
+      ...mapState({
+			newsList: state => state.news.list
+      }),
+   },
+   created() {
+      // 订阅更新事件
+      window.addEventListener('event_update', event => {
+         // 获得事件参数
+			let detail = event.detail;
+			// 触发子组件更新
+			Utils.log(detail, 'event_update with detail');
+         this.update();
+      })
+   },
+   mounted() {
+      this.$nextTick(() => {
+         this.init();
+      });
+   },
+   methods: {
+      init() {
+         // mui.init({
+         //    pullRefresh: {
+         //       container: this.newsRefreshElementId,
+         //       down: { ... PULL_REFRESH_UI,
+         //          callback: this.pullDownRefresh
+         //       }
+         //    }
+         // });
+         this.fetchData();
+      },
+      fetchData() {
+         this.$store.dispatch(FETCH_NEWS, this.params)
+			.then(() => {
+				console.log(this.newsList);
+			})
+			.catch(error => {
+				console.error('has-error:',error);
+         })
+         .finally(() => {
+            //mui(this.newsRefreshElementId).pullRefresh().endPulldownToRefresh();
+         })
+      },
+      onTabChanged(name) {
+         if(this.focusNewsList.length) return;
+
+         for(let i = this.newsList.length - 1; i >= 0; i--){
+            let item = { ...this.newsList[i] };
+            if((i % 2) === 0) this.myNewsList.push(item);
+            else this.focusNewsList.push(item);
+         }
+      },
+      pullDownRefresh() {
+         this.fetchData();
+      },
+      update() {
+         console.log('update');
+         this.fetchData();
+      },
+      onSelected(item) {
+         let view = 'article';
+         // 两种传参方式用于非plus/plus环境
+         PageManager.invoke(view, 'event_update', { id: item._id });
+         
+         setTimeout(() => {
+            let url = buildQuery(`${view}.html`, { id: item._id });
+            PageManager.openWindow(url);
+         }, 150)
+      }
+   }
+};
+</script>
+
+<style lang="scss" scoped>
+@import '@/assets/scss/var';
+.van-tabs.van-tabs--line {
+   padding-top: $padding-main;
+}
+</style>
+

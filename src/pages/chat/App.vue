@@ -23,19 +23,12 @@ export default {
 	},
 	data() {
       return {
-         name: 'chat'
+         name: 'chat',
+         ready: false
       };
    },
 	created() {
-      this.$store.dispatch(INIT);
-
-      PageManager.plusReady(() => {
-         if(this.isPlus) {
-            let subPages = getSubPages(this.name);
-            log(subPages, 'subPages');
-            PageManager.preLoad(subPages);
-         }
-      })
+      Utils.onPageCreated(this, this.isPlus);
    },
 };
 </script>

@@ -2,11 +2,12 @@ import PageManager from 'page-manager';
 import Errors from '@/common/errors';
 import { INIT, CHECK_AUTH, GO_TO_PAGE, FETCH_TAB_PAGES, SELECT_TAB } from '@/store/actions.type';
 import { SET_ERROR, CLEAR_ERROR, SET_LOADING, 
-   SET_CURRENT_PAGE, SET_TAB_PAGES, SET_ACTIVE_TAB } from '@/store/mutations.type';
+   SET_CURRENT_PAGE, SET_SUB_PAGES, SET_TAB_PAGES, SET_ACTIVE_TAB } from '@/store/mutations.type';
 
 const initialState = {
    test: null,
    loading: false,
+   subPages: [],
    tabPages: [],
    currentPage: Routes.getDefaultPage(),
    activeTab: null,
@@ -23,6 +24,9 @@ const getters = {
       if(PageManager) return PageManager.isPlus;
       return false;
    },
+   subPages() {
+      return state.subPages;
+   },
    activeTabName() {
       if(state.activeTab) return state.activeTab.name;
       return '';
@@ -36,6 +40,9 @@ const actions = {
 
       let tabPages = Routes.getTabPages(user);
       context.commit(SET_TAB_PAGES, tabPages);
+
+      let subPages = Routes.getSubPages(page.name, user);
+      context.commit(SET_SUB_PAGES, subPages);
 
       context.commit(SET_CURRENT_PAGE, page);
       if(getters.isPlus()) {
@@ -91,6 +98,9 @@ const mutations = {
    },
    [SET_LOADING](state, loading) {
       state.loading = loading;
+   },
+   [SET_SUB_PAGES](state, subPages) {
+      state.subPages = subPages;
    },
    [SET_TAB_PAGES](state, tabPages) {
       state.tabPages = tabPages;

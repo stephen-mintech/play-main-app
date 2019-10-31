@@ -1,9 +1,9 @@
 <template>
-	<div class="page-content nav-content">
+	<div class="page-content">
       <van-nav-bar title="Demo" fixed />
-		<section class="cell-wrap">
+		<!-- <section class="cell-wrap">
 			
-		</section>
+		</section> -->
    </div>
 </template>
 

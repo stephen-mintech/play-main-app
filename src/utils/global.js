@@ -16,6 +16,7 @@ export const onPageCreated = (vm, isPlus) => {
 
       vm.$store.dispatch(CHECK_AUTH, page)
       .then(result => {
+         console.log('result', result);
          if(result.auth) {
             vm.$store.dispatch(INIT, { page, user: result.user });
             vm.ready = true;

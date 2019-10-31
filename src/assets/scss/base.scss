@@ -7,8 +7,27 @@
 .index-content {
   padding-bottom: 49px;
 }
+
 .bdbg {
-  background-color: #f4f4f4
+  background-color: $main-bg-color
+}
+.hdbg {
+  background: rgb(175,244,255);
+  background: -moz-linear-gradient(45deg, rgba(175,244,255,1) 0%, rgba(0,156,234,1) 100%);
+  background: -webkit-linear-gradient(45deg, rgba(175,244,255,1) 0%,rgba(0,156,234,1) 100%);
+  background: linear-gradient(45deg, rgba(175,244,255,1) 0%,rgba(0,156,234,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#aff4ff', endColorstr='#009cea',GradientType=1 );
+}
+.card-content {
+  background-color: $content-bg-color
+}
+
+.block-title {
+  margin: 0;
+  padding: 5px 15px 5px;
+  color: rgba(69, 90, 100, 0.6);
+  font-weight: normal;
+  font-size: 14px;
 }
 
 .footer {
@@ -103,6 +122,27 @@
 /* my list end */
 
 /* common start */
+
+.margin-10 {
+  margin : 10px;
+}
+
+.mr-10 {
+  margin-right : 10px;
+}
+.ml-10 {
+  margin-left : 10px;
+}
+
+.main-title {
+  font-weight : 400;
+  font-size : $main-title-font-size;
+}
+.sub-title {
+  // color : #808080;
+  color: rgba(69, 90, 100, 0.6);
+  font-size : 13px;
+}
 
 .text-black {
   color: #000 !important;

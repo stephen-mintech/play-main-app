@@ -2,19 +2,12 @@
 	<div class="page-content">
 		<van-panel title="重要訊息">
          <van-cell-group>
-            <van-cell v-for="(item, index) in menuItems" :key="index" is-link
-               :title="item.title"
-               @click="onMsgSelected(item)"
-            >
-               <van-icon
-                  slot="icon"
-                  :name="item.icon"
-                  class="cell-title-icon"
-               />
-            </van-cell>   
+            <Link v-for="(item, index) in subPages" :key="index"
+               :name="item.name" :icon="item.meta.icon" :text="item.meta.title" 
+            />
          </van-cell-group>
       </van-panel>
-
+      <Spacer />
       <van-panel title="交談訊息">
          <van-cell-group>
             <van-cell v-for="(item, index) in messages" :key="index" @click="onMsgSelected(item)" is-link>
@@ -32,11 +25,15 @@ import { GO_TO_PAGE } from '@/store/actions.type';
 import { Panel, Cell, CellGroup, Icon } from 'vant';
 Vue.use(Panel).use(Cell).use(CellGroup).use(Icon);
 
+import Link from '@/components/Link';
+import Spacer from '@/components/Spacer';
 import MessagesItem from '@/components/message/Item';
 
 export default {
    name: 'Notices',
    components: {
+      Link,
+      Spacer,
 		MessagesItem
 	},
    data() {
@@ -57,7 +54,7 @@ export default {
       };
    },
    computed: {
-      
+      ...mapGetters(['subPages'])
    },
    created() {
       

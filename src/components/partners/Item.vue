@@ -19,7 +19,7 @@
                </span>
             </div>
          </div>
-         <div class="name-container" binfo="name">
+         <div style="padding-top: 5px;" class="name-container" binfo="name">
             <span :style="{color:(model.Color||'black')}" class="dot" :class="{nameshadow:(model.Color||'black' != 'black')}" style="max-width:70%;">
                {{ model.Name }}
             </span>  
@@ -29,7 +29,7 @@
                <span style="font-size:10px">{{ model.Age }}</span>
             </span>
          </div>
-         <div v-if="(hideNews) ? false : true" class="price-board">
+         <div v-if="(hideNews) ? false : true" class="price-board" style="padding-top: 3px;">
             接單 {{ model.OrderTimes }}次
             <span class="price-text" > {{ model.Fee }}幣/ {{ model.Unit }}</span>
          </div>
@@ -84,7 +84,7 @@ export default {
 .model-container {
    /* width : 45vw; */
    /* width : 50%; */
-   padding-left:1%;
+   /* padding-left: 1%;*/
    display : inline-block;
    padding-bottom : 10px;
    position : relative

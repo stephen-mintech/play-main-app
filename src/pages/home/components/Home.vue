@@ -1,6 +1,6 @@
 <template>
    <div class="page-content">
-      <HomeMenu :menu_items="homeMenuItems" @selected="onMenuSelected" />
+      <HomeMenu style="margin:2px;padding-top:1px" :menu_items="homeMenuItems" @selected="onMenuSelected" />
       <Loading v-if="loading" />
       <div v-else>
          <HomeSlideList v-for="(item, index) in categories" :key="index"

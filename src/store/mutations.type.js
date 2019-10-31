@@ -1,11 +1,13 @@
+//app.module
 export const SET_ERROR = 'setError';
 export const CLEAR_ERROR = 'clearError';
-
 export const SET_LOADING = 'setLoading';
 export const SET_CURRENT_PAGE = 'setCurrentPage';
+export const SET_SUB_PAGES = 'setSubPages';
 export const SET_TAB_PAGES = 'setTabPages';
 export const SET_ACTIVE_TAB = 'setActiveTab';
 
+//auth.module
 export const PURGE_AUTH = 'logOut';
 export const SET_AUTH = 'setAuth';
 export const SET_USER = 'setUser';

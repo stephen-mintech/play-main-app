@@ -1,0 +1,118 @@
+.media-box {
+   padding: 15px;
+   position: relative;
+}
+
+.media-box:before {
+      content: " ";
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 1px;
+      border-top: 1px solid #E5E5E5;
+      color: #E5E5E5;
+      transform-origin: 0 0;
+      transform: scaleY(0.5);
+      left: 15px;
+}
+
+.media-box:first-child:before {
+      display: none;
+}
+
+a.media-box {
+   color: #000000;
+   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+a.media-box:active {
+   background-color: #ECECEC;
+}
+
+.media-box__title {
+   font-weight: 400;
+   font-size: 17px;
+   width: auto;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   word-wrap: normal;
+   word-wrap: break-word;
+   word-break: break-all;
+}
+
+.media-box__desc {
+   color: #808080;
+   font-size: 13px;
+   line-height: 1.2;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-box-orient: vertical;
+   -webkit-line-clamp: 2;
+}
+
+.media-box__info {
+   margin-top: 15px;
+   padding-bottom: 5px;
+   font-size: 13px;
+   color: #CECECE;
+   line-height: 1em;
+   list-style: none;
+   overflow: hidden;
+}
+
+.media-box__info__meta {
+   float: left;
+   padding-right: 1em;
+}
+
+.media-box__info__meta_extra {
+   padding-left: 1em;
+   border-left: 1px solid #CECECE;
+}
+
+.media-box_text .media-box__title {
+   margin-bottom: 8px;
+}
+
+.media-box_appmsg {
+   display: flex;
+   align-items: center;
+}
+
+.media-box_appmsg .media-box__hd {
+      margin: 0 auto;
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
+}
+
+.media-box_appmsg .media-box__thumb {
+      /*width: 100%;
+      max-height: 100%;*/
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      vertical-align: top;
+}
+
+.media-box_appmsg .media-box__bd {
+      flex: 1;
+      min-width: 0;
+}
+
+.media-box_small-appmsg {
+   padding: 0;
+}
+
+.media-box_small-appmsg .cells {
+      margin-top: 0;
+}
+
+.media-box_small-appmsg .cells:before {
+   display: none;
+}

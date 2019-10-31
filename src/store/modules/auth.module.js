@@ -9,7 +9,7 @@ import { SET_AUTH, PURGE_AUTH, SET_USER } from '../mutations.type';
 
  
 const state = {
-   user: null,
+   user: { id: 35, name: 'stephen'},
    isAuthenticated: false//!!Jwt.getToken()
 };
 
@@ -35,15 +35,25 @@ const hasAdminRole = (claims) => {
 
 const canVisitPage = (page, user = null) => {
    if(page.meta.type === FOR_ALL) return true;
+   if(user) return true;
    return false;
 }
 
 const actions = {
    [CHECK_AUTH](context, page) {
-      console.log(CHECK_AUTH);
       return new Promise((resolve) => {
-         let accessToken = null;//Jwt.getToken();
+         let accessToken = 'fakeToken';//Jwt.getToken();
          if(accessToken) {
+            let user = {
+               id: 35,
+               name: 'stephen'
+            };
+            context.commit(SET_USER, user); 
+            resolve({
+               user,
+               auth: canVisitPage(page, user)
+            });
+            return;
             BaseService.setHeader();
             let claims = jwtDecode(accessToken);
             if(hasAdminRole(claims)){

@@ -1,23 +1,21 @@
 <template>
-	<div class="page-content">
-      Chat
+	<div >
+      <van-cell-group>
+  <van-cell title="单元格" value="内容" />
+  <van-cell title="单元格" value="内容" label="描述信息" />
+</van-cell-group>
    </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import PageManager from 'page-manager';
-import mui from 'mui';
-import { log } from '@/utils';
+import { Cell, CellGroup } from 'vant';
 
-import ChatItem from '@/components/chat/Item';
-import { NavBar, Tab, Tabs } from 'vant';
-Vue.use(Tab).use(Tabs);
-
+Vue.use(Cell).use(CellGroup);
 export default {
    name: 'Chat',
    components: {
-		NewsItem
+		
 	},
    data() {
       return {
@@ -34,7 +32,7 @@ export default {
    methods: {
       init() {
          
-         this.fetchData();
+         
       },
       fetchData() {
          
@@ -42,11 +40,3 @@ export default {
    }
 };
 </script>
-
-<style lang="scss" scoped>
-@import '@/assets/scss/var';
-.van-tabs.van-tabs--line {
-   padding-top: $padding-main;
-}
-</style>
-

@@ -1,9 +1,7 @@
 <template>
-<div >
-   <div>
-      <span style="background-color:deepskyblue;">
-         <span style="color:deepskyblue;">-</span>
-      </span>
+<div>
+   <div style="margin:6px">
+      <LabelBar  />
       {{ category.title }}
       <span @click="more" class="more">更多</span>
    </div>
@@ -18,6 +16,7 @@
 
 <script>
 import PartnersItem from '@/components/partners/Item';
+import LabelBar from '@/components/LabelBar';
 
 export default {
    name: 'HomeSlideList',
@@ -28,6 +27,7 @@ export default {
       hideNews: Boolean
    },
    components: {
+      LabelBar,
 		PartnersItem
 	},
    beforeMount() {

@@ -5,10 +5,10 @@ var applinks = [
 	{
       name: 'home',
       view: 'home.html',
-      parent: '',
+      parents: [],
       meta: {
          order: 0,
-         icon: 'home-o',
+         icon: 'home-outline',
          title: '首頁',
 			tab: true
       } 
@@ -16,29 +16,51 @@ var applinks = [
    {
       name: 'news',
       view: 'news.html',
-      parent: '',
+      parents: [],
       meta: {
          order: 0,
-         icon: 'newspaper-o',
+         icon: 'game-controller-a-outline',
          title: '動態',
+			tab: true
+      } 
+   },
+   {
+      name: 'ranking',
+      view: 'ranking.html',
+      parents: [],
+      meta: {
+         order: 0,
+         icon: 'heart',
+         title: '排行',
 			tab: true
       } 
    },
    {
       name: 'notices',
       view: 'notices.html',
-      parent: '',
+      parents: [],
       meta: {
          order: 0,
-         icon: 'envelop-o',
+         icon: 'email-outline',
          title: '消息',
 			tab: true
       } 
    },
    {
+      name: 'bulletin',
+      view: 'bulletin.html',
+      parents: ['notices'],
+      meta: {
+         order: 0,
+         icon: 'bell-outline',
+         title: '官方公告',
+			tab: false
+      } 
+   },
+   {
       name: 'partners',
       view: 'partners.html',
-      parent: 'home',
+      parents: ['home'],
       meta: {
          order: 0,
          title: '傾聽師',
@@ -48,7 +70,7 @@ var applinks = [
    {
       name: 'article',
       view: 'article.html',
-      parent: 'news',
+      parents: ['news'],
       meta: {
          order: 0,
 			tab: false
@@ -57,7 +79,7 @@ var applinks = [
    {
       name: 'chat',
       view: 'chat.html',
-      parent: '',
+      parents: [],
       meta: {
          order: 0,
          title: '交談',
@@ -67,7 +89,7 @@ var applinks = [
    {
       name: 'categories',
       view: 'categories.html',
-      parent: '',
+      parents: [],
       meta: {
          order: 0,
          icon: 'search',
@@ -78,7 +100,7 @@ var applinks = [
 	{
       name: 'demo',
       view: 'demo.html',
-      parent: '',
+      parents: [],
       meta: {
          order: 0,
          icon: 'search',
@@ -96,7 +118,7 @@ var adminlinks = [
       name: 'Dashboard',
       path: '/dashboard',
       view: 'Dashboard',
-      parent: '',
+      parents: [],
       meta: {
          order: 0,
          icon: 'mdi-view-dashboard',
@@ -112,7 +134,7 @@ var guestLinks = [
    {
       name: 'login',
       view: 'login.html',
-      parent: '',
+      parents: [],
       meta: {
          order: 0,
          icon: 'manager-o',
@@ -128,25 +150,113 @@ var userLinks = [
    {
       name: 'my',
       view: 'my.html',
-      parent: '',
+      parents: [],
       meta: {
          order: 0,
-         icon: 'manager-o',
+         icon: 'person-outline',
          title: '我的',
 			tab: true
       } 
    },
-	{
-      name: 'Profile',
-      path: '/profile',
-      view: 'profile',
-      parent: '',
+   {
+      name: 'profile',
+      view: 'profile.html',
+      parents: ['my'],
       meta: {
          order: 0,
-         icon: 'mdi-view-dashboard',
-         title: 'Profile'
+         icon: '',
+         title: '個人資料',
+			tab: false
       } 
-   }
+   },
+	{
+      name: 'concat-us',
+      view: '',
+      parents: ['my'],
+      meta: {
+         order: 0,
+         icon: 'briefcase-outline',
+         title: '聯繫客服',
+			tab: false
+      } 
+   },
+   {
+      name: 'join-partner',
+      view: '',
+      parents: ['my'],
+      meta: {
+         order: 0,
+         icon: 'game-controller-b-outline',
+         title: '加入陪練',
+			tab: false
+      } 
+   },
+   {
+      name: 'orders',
+      view: '',
+      parents: ['my', 'notices'],
+      meta: {
+         order: 0,
+         icon: 'list-outline',
+         title: '訂單中心',
+			tab: false
+      } 
+   },
+   {
+      name: 'wallet',
+      view: '',
+      parents: ['my'],
+      meta: {
+         order: 0,
+         icon: 'briefcase-outline',
+         title: '我的錢包',
+			tab: false
+      } 
+   },
+   {
+      name: 'album',
+      view: '',
+      parents: ['my'],
+      meta: {
+         order: 0,
+         icon: 'bookmarks-outline',
+         title: '我的相簿',
+			tab: false
+      } 
+   },
+   {
+      name: 'bank-account',
+      view: 'bank-account.html',
+      parents: ['my'],
+      meta: {
+         order: 0,
+         icon: 'calculator-outline',
+         title: '銀行帳戶',
+			tab: false
+      } 
+   },
+   {
+      name: 'tutorial',
+      view: '',
+      parents: ['my'],
+      meta: {
+         order: 0,
+         icon: 'book-outline',
+         title: '新手教學',
+			tab: false
+      } 
+   },
+   {
+      name: 'settings',
+      view: 'settings.html',
+      parents: ['my'],
+      meta: {
+         order: 0,
+         icon: 'gear-outline',
+         title: '設置',
+			tab: false
+      } 
+   },
 ];
 
 userLinks.forEach(item => item.meta.type = USER_ONLY);
@@ -169,7 +279,7 @@ const getLinks = (user = null) => {
 	}
 }
 
-const findPage = (name) => appRoutes.find(item => item.name === name);
+const findPage = (name) => appRoutes.find(item => item.name.toLowerCase() === name.toLowerCase());
 
 const getDefaultPage = (user = null) => {
    let links = getLinks(user);
@@ -177,7 +287,10 @@ const getDefaultPage = (user = null) => {
    if(DEFAULT_PAGE_NAME) name = DEFAULT_PAGE_NAME;
 	return links.find(item => item.name === name);
 }
-
+const getRootPages = (user = null) => {
+	let links = getLinks(user);
+	return links.filter(item => !item.parents || !item.parents.length);
+}
 const getMenuPages = (user = null) => {
 	let links = getLinks(user);
 	return links.filter(item => item.meta && item.meta.menu);
@@ -190,7 +303,7 @@ const getTabPages = (user = null) => {
 
 const getSubPages = (parent, user = null) => {
 	let links = getLinks(user);
-	return links.filter(item => item.parent && item.parent === parent);
+	return links.filter(item => item.parents && item.parents.includes(parent));
 }
 
 
@@ -203,6 +316,7 @@ const findPageByPath = (path, user = null) => {
 export default {
    findPage,
    getDefaultPage,
+   getRootPages,
    getSubPages,
    getTabPages,
    findPageByPath,

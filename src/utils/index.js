@@ -1,5 +1,8 @@
 import Qs from 'qs';
 
+export const isPlus = () => navigator.userAgent.indexOf('Html5Plus') >= 0;
+
+
 export const resolveErrorData = (error) => {
    console.error(error);
    if(!error) return null;

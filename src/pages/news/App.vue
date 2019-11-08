@@ -7,7 +7,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-
+import { PLUS_READY, GO_TO_PAGE } from '@/store/actions.type';
 import News from './components/News';
 import MFooter from '@/components/FootTab';
 
@@ -19,15 +19,18 @@ export default {
 	},
 	data() {
       return {
-         name: 'news',
-         ready: false
+         name: 'news'
       };
    },
    computed: {
-		...mapGetters(['isPlus'])
+      ...mapGetters(['isPlus', 'initComplete', 'plusReady']),
+      ready() {
+         if(this.isPlus) return this.plusReady;
+         return this.initComplete;
+      }
    },
 	created() {
-      Utils.onPageCreated(this, this.isPlus);
+      Utils.onPageCreated(this);
       
    },
    methods: {

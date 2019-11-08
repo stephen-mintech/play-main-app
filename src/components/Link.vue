@@ -32,7 +32,7 @@ export default {
          return `color : red;`;
       },
       onSelected() {
-         this.$emit('selected', name);
+         this.$emit('selected', this.name);
       }
       
    }

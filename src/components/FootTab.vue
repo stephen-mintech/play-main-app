@@ -1,10 +1,6 @@
 <template>
 	<div>
-		<van-tabbar v-model="active" active-color="#07c160" inactive-color="#000" class="tabbg">
-			<!-- <van-tabbar-item info="3">
-				<span>自定义</span>
-				<van-icon class-prefix="ion-ios" name="briefcase-outline" slot="icon"/>
-			</van-tabbar-item> -->
+		<van-tabbar v-model="active" :active-color="activeColor" inactive-color="#000" class="tabbg">
 			<van-tabbar-item v-for="(item, index) in tabPages" :key="index" :info="getInfoCount(item)"
 				@click.prevent="onSelected(item)"
 			>
@@ -20,6 +16,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { SELECT_TAB } from '@/store/actions.type';
+import { APP_UI } from '@/config';
 
 import { Tabbar, TabbarItem, Icon } from 'vant';
 Vue.use(Tabbar).use(TabbarItem).use(Icon);
@@ -28,10 +25,12 @@ export default {
 	name: 'FootTab',
 	data() {
 		return {
-			active: 0
+			active: 0,
+			activeColor: APP_UI.mainColor
 		};
 	},
 	computed: {
+		...mapGetters(['currentUser', 'currentPage']),
 		...mapState({
 			tabPages: state => state.app.tabPages,
 			activeTab: state => state.app.activeTab
@@ -41,7 +40,9 @@ export default {
 		
 	},
 	beforeMount(){
-		this.active = this.tabPages.findIndex(item => item.name === this.activeTab.name);
+		let active = this.tabPages.findIndex(item => item.name === this.activeTab.name);
+		if(active >= 0) this.active = active
+		
 	},
 	methods: {
 		getInfoCount(item) {
@@ -51,7 +52,7 @@ export default {
 		onSelected(item) {
 			if(item.name === this.activeTab.name) return;
 			
-			this.$store.dispatch(SELECT_TAB, item);
+			this.$store.dispatch(SELECT_TAB, { user: this.currentUser, page: item });
 
 			//PageManager.switchTab(item.name, this.activeTabName);
 			//PageManager.invoke(item.name, 'event_update');

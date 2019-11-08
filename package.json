@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --no-clean",
     "lint": "vue-cli-service lint",
-    "watch": "vue-cli-service build --no-clean --watch",
+    "watch": "vue-cli-service build --mode development --no-clean --watch",
     "dev": "node --max_old_space_size=4096 node_modules/@vue/cli-service/bin/vue-cli-service.js  serve "
   },
   "dependencies": {

@@ -1,5 +1,5 @@
 (function(global, undefined) {
-
+   console.log('begin PageManager');
    if(global.PageManager) return;
 
    var config = {
@@ -79,6 +79,8 @@
    * @param {Number} index 页面索引
    */
    function initWebview(subPages, index) {
+      console.log('initWebview ');
+      return;
       console.log('initWebview index:' , index);
       console.log('initWebview subPages:' , JSON.stringify(subPages));
       if(!isPlus) return;
@@ -125,6 +127,7 @@
    }
 
    function setStatusBarBg(color, style) {
+      console.log('setStatusBarBg');
       // 设置系统状态栏背景
       plus.navigator.setStatusBarBackground(color || config.statusbar);
       plus.navigator.setStatusBarStyle(style || 'light');
@@ -156,6 +159,7 @@
    * @param {String} path
    */
    function switchTab(name, oldName) {
+      console.log('switchTab');
       if(typeof plus !== 'undefined') {
          if(loadedPage[name]) {
             plus.webview.show(name, 'none');
@@ -185,6 +189,7 @@
    * 返回主页
    */
    function goHome() {
+      console.log('goHome');
       switchTab('home.html');
       invoke('Hbuilder', 'index_update_tab', {
          path: 'home.html'
@@ -198,6 +203,7 @@
    }
 
    function openWindow(url, options) {
+      console.log('openWindow');
       if(!url) return;
   
       var styles = {};
@@ -235,6 +241,7 @@
    }
 
    function openWindowWithTitle(url, options) {
+      console.log('openWindowWithTitle');
       if(!options) options = {};
   
       if(!options.styles) options.styles = {};
@@ -259,6 +266,7 @@
    }
 
    function preLoad(pages) {
+      console.log('preLoad');
       if(!pages) return;
 
       if(pages.length && isPlus) {
@@ -280,6 +288,7 @@
    // 封装mui.fire
    var invoke = function (name, event, data) {
       if(!isPlus) return;
+      console.log('invoke');
       plusReady(function () {
          var page = plus.webview.getWebviewById(name);
          console.log('invoke page', JSON.stringify(page));
@@ -289,6 +298,7 @@
 
    var invokeAll = function(event, data) {
       if(!isPlus) return;
+      console.log('invokeAll');
       var pages = plus.webview.all();
       if (pages.length) {
          for (var i = 0; i < pages.length; i++) {
@@ -319,4 +329,4 @@
 
 })(window, undefined);
   
-PageManager.initPage();
+//PageManager.initPage();

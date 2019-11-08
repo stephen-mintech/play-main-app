@@ -9,7 +9,8 @@
       <Spacer />
       <van-cell-group>
          <Link v-for="(item, index) in links" :key="index"
-            :name="item.name" :icon="item.meta.icon" :text="item.meta.title" 
+            :name="item.name" :icon="item.meta.icon" :text="item.meta.title"
+            @selected="onLinkSelected" 
          />
       </van-cell-group>
 
@@ -67,6 +68,10 @@ export default {
    methods: {
       init() {
          
+      },
+      onLinkSelected(name) {
+         let page = this.links.find(item => item.name === name);
+         console.log('onLinkSelected', page);
       }
       
    }

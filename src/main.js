@@ -5,6 +5,7 @@ import Vue from 'vue';
 //import '@/styles/css/app/app.css';
 
 import '@/assets/css/ionicons/ionicons.min.css';
+import '@/assets/css/font-awesome-4.7.0/css/font-awesome.css';
 
 //import AllIosIcon from 'vue-ionicons/dist/ionicons-ios.js'
 //Vue.use(AllIosIcon)

@@ -2,10 +2,18 @@ import { FOR_ALL, GUEST_ONLY, USER_ONLY, ADMIN_ONLY } from './route.type';
 import { DEFAULT_PAGE_NAME } from '@/config';
 
 var applinks = [
+   {
+      name: 'index',
+      view: 'index.html',
+      parents: [],
+      meta: {
+         order: 0
+      } 
+   },
 	{
       name: 'home',
       view: 'home.html',
-      parents: [],
+      parents: ['index'],
       meta: {
          order: 0,
          icon: 'home-outline',
@@ -16,7 +24,7 @@ var applinks = [
    {
       name: 'news',
       view: 'news.html',
-      parents: [],
+      parents: ['index'],
       meta: {
          order: 0,
          icon: 'game-controller-a-outline',
@@ -27,7 +35,7 @@ var applinks = [
    {
       name: 'ranking',
       view: 'ranking.html',
-      parents: [],
+      parents: ['index'],
       meta: {
          order: 0,
          icon: 'heart',
@@ -38,7 +46,7 @@ var applinks = [
    {
       name: 'notices',
       view: 'notices.html',
-      parents: [],
+      parents: ['index'],
       meta: {
          order: 0,
          icon: 'email-outline',
@@ -60,7 +68,7 @@ var applinks = [
    {
       name: 'partners',
       view: 'partners.html',
-      parents: ['home'],
+      parents: [''],
       meta: {
          order: 0,
          title: '傾聽師',
@@ -100,7 +108,7 @@ var applinks = [
 	{
       name: 'demo',
       view: 'demo.html',
-      parents: [],
+      parents: ['home'],
       meta: {
          order: 0,
          icon: 'search',
@@ -150,7 +158,7 @@ var userLinks = [
    {
       name: 'my',
       view: 'my.html',
-      parents: [],
+      parents: ['index'],
       meta: {
          order: 0,
          icon: 'person-outline',
@@ -170,7 +178,7 @@ var userLinks = [
       } 
    },
 	{
-      name: 'concat-us',
+      name: 'contact-us',
       view: '',
       parents: ['my'],
       meta: {
@@ -182,7 +190,7 @@ var userLinks = [
    },
    {
       name: 'join-partner',
-      view: '',
+      view: 'join-partner.html',
       parents: ['my'],
       meta: {
          order: 0,
@@ -289,7 +297,7 @@ const getDefaultPage = (user = null) => {
 }
 const getRootPages = (user = null) => {
 	let links = getLinks(user);
-	return links.filter(item => !item.parents || !item.parents.length);
+	return links.filter(item => item.parents.includes('index'));
 }
 const getMenuPages = (user = null) => {
 	let links = getLinks(user);

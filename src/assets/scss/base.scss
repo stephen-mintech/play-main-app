@@ -11,6 +11,7 @@
 .bdbg {
   background-color: $main-bg-color
 }
+
 .hdbg {
   background: rgb(175,244,255);
   background: -moz-linear-gradient(45deg, rgba(175,244,255,1) 0%, rgba(0,156,234,1) 100%);
@@ -144,6 +145,10 @@
   font-size : 13px;
 }
 
+.text-main {
+  font-size : $main-title-font-size;
+}
+
 .text-black {
   color: #000 !important;
 }
@@ -179,6 +184,10 @@
 }
 .text-tip {
   color: $color-tip !important;
+}
+
+.text-deepskyblue {
+  color: deepskyblue !important;
 }
 
 .float-left {
@@ -249,5 +258,19 @@
   left: 0;
   width: 100%;
 }
+
+.badge {
+  display: inline-block;
+  padding: .15em .4em;
+  min-width: 8px;
+  border-radius: 18px;
+  background-color: #F43530;
+  color: #FFFFFF;
+  line-height: 1.2;
+  text-align: center;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
 
 /* common end */

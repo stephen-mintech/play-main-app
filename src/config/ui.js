@@ -1,3 +1,12 @@
+export const APP_UI = {
+   barHeight: 44,
+   top: '0px', //设置距离顶部的距离
+   bottom: '49px', //设置距离底部的距离
+   statusbarColor: '#000000',
+   mainColor: 'rgb(220, 40, 115)',
+   aniShow : 'pop-in',
+};
+
 export const PULL_REFRESH_UI = {
    style: 'circle',
    offset: '44px', // 可选 默认0px,下拉刷新控件的起始位置

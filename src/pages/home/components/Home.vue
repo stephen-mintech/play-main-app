@@ -49,6 +49,7 @@ export default {
       }
    },
    beforeMount() {
+      console.log('beforeMount');
       // this.categories.forEach(item => {
       //    for(let i=0; i<20; i++){
       //       item.partners.push({

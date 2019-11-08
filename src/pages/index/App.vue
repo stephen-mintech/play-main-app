@@ -1,13 +1,14 @@
 <template>
-	<div id="app">
+	<div id="app" v-if="ready">
+		
 		<MFooter />
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import { PLUS_READY, INIT_WEBVIEW, GO_TO_PAGE } from '@/store/actions.type';
 import MFooter from '@/components/FootTab';
-import PageManager from 'page-manager';
 
 export default {
 	name: 'App',
@@ -16,36 +17,40 @@ export default {
 	},
 	data() {
 		return {
-			
+			name: 'index'
 		};
 	},
 	computed: {
-		...mapGetters(['currentUser', 'activeTabName']),
-		...mapState({
-			tabPages: state => state.app.tabPages,
-			activeTab: state => state.app.activeTab
-      }),
+      ...mapGetters(['isPlus', 'initComplete', 'plusReady']),
+      ready() {
+         if(this.isPlus) return this.plusReady;
+         return this.initComplete;
+      }
    },
 	created() {
-		PageManager.plusReady(() => {
-			if(PageManager.isPlus) {
-				
-				let subPages = this.tabPages;
-				PageManager.initWebview(subPages);
+		window.addEventListener('bus', this.busEventHandler);
 
-				// 关闭splash页面；
-				plus.navigator.closeSplashscreen();
-				// 关闭全屏
-				plus.navigator.setFullscreen(false);
-				
-			}else {
-				window.location.href = 'home.html';
-			}
+		Utils.onPageCreated(this);
 
+
+		Bus.$on(PLUS_READY, () => {
+			let showWebviewName = 'home';
+			this.$store.dispatch(INIT_WEBVIEW, showWebviewName);
+
+			plus.navigator.closeSplashscreen();
+			// 关闭全屏
+			plus.navigator.setFullscreen(false);
 		});
+		
 	},
 	methods: {
-		
+		busEventHandler(e) {
+			console.log('payload in vue', e.detail	);
+		},
+		goPage(e){
+			console.log('goPage in vue', e);
+			//e.detail
+		}
 	}
 };
 </script>

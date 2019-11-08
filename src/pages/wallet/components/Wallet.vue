@@ -1,7 +1,15 @@
 <template>
 	<div class="page-content" style="height:686px">
-      <div class="hdbg" style="height: 20%;position: relative;">
-         <Spacer :height="20" />
+      <div class="hdbg" style="height: 30%;position: relative;">
+         <TopButton icon="fa fa-angle-left" position="left" id="back"
+            @selected="goBack"
+         />
+         <TopButton icon="ion-ios-help-outline" position="right"
+            @selected="explain"
+         />
+         
+         <Spacer :height="40" />
+         
          <van-row type="flex" justify="center" style="color: white;text-align: center;height: 80%;">
             <van-col span="6" >
                <div :style="`background-image: url(${require('@/assets/img/coin.png')});`" class="coin-container">
@@ -28,22 +36,66 @@
                </div>
             </van-col>
          </van-row>
-         
+      </div>
+      <div>
+         <Spacer :height="20" />
+         <van-cell-group>
+            <van-cell :center="true" title="預估仙人掌幣收益" title-class="main-title" 
+               label="本月預估仙人掌幣收益" value="0幣" value-class="text-deepskyblue text-main"
+               size="large" 
+            >
+               <img slot="icon" style="width: 40px;margin-right:10px" :src="require('@/assets/img/diamond.png')" />
+               
+            </van-cell>
+         </van-cell-group>
+         <Spacer :height="20" />
+         <van-cell-group>
+            <van-cell :center="true" title="收禮輕單" title-class="main-title" is-link
+               size="large" 
+            >
+               <img slot="icon" style="width: 40px;margin-right:10px" :src="require('@/assets/img/giftlist.png')" />
+               
+            </van-cell>
+            <van-cell :center="true" title="我的體驗券" title-class="main-title" is-link
+               size="large" 
+            >
+               <img slot="icon" style="width: 40px;margin-right:10px" :src="require('@/assets/img/ticket.png')" />
+               <span class="badge">1</span>
+            </van-cell>
+            
+         </van-cell-group>
+         <Spacer :height="20" />
+         <van-cell-group>
+            <van-cell :center="true" title="儲值" title-class="main-title" is-link
+               size="large" 
+            >
+               <img slot="icon" style="width: 40px;margin-right:10px" :src="require('@/assets/img/treasure.png')" />
+               
+            </van-cell>
+            <van-cell :center="true" title="提款" title-class="main-title" is-link
+               size="large" 
+            >
+               <img slot="icon" style="width: 40px;margin-right:10px" :src="require('@/assets/img/gold2.png')" />               
+            </van-cell>
+            
+         </van-cell-group>
       </div>
    </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { Row, Col } from 'vant';
-Vue.use(Row).use(Col);
+import { Row, Col, CellGroup, Cell } from 'vant';
+Vue.use(Row).use(Col).use(CellGroup).use(Cell);
 
-import Spacer from '@/components/Spacer'; 
+import Spacer from '@/components/Spacer';
+import TopButton from '@/components/TopButton';
 
 export default {
    name: 'Wallet',
    components: {
-      Spacer
+      Spacer,
+      TopButton
 	},
    data() {
       return {
@@ -73,6 +125,9 @@ export default {
          let src = `static/images/avatars/${model.Avatar}`;
          return `background-image: url(${src})`;
       },
+      explain() {
+
+      },
       goBack() {
 			mui.back();
       },
@@ -99,7 +154,5 @@ export default {
    background-size: auto 100%;
    background-position: center center;
 }
-
-
 </style>
 

@@ -1,13 +1,14 @@
-import PageManager from 'page-manager';
 import Errors from '@/common/errors';
-import { INIT, CHECK_AUTH, GO_TO_PAGE, FETCH_TAB_PAGES, SELECT_TAB } from '@/store/actions.type';
-import { SET_ERROR, CLEAR_ERROR, SET_LOADING, 
+import { INIT, INIT_PLUS, GO_TO_PAGE, FETCH_TAB_PAGES, SELECT_TAB } from '@/store/actions.type';
+import { SET_INIT_COMPLETE, SET_ERROR, CLEAR_ERROR, SET_LOADING, 
    SET_CURRENT_PAGE, SET_SUB_PAGES, SET_TAB_PAGES, SET_ACTIVE_TAB } from '@/store/mutations.type';
 
+import { isPlus } from '@/utils';
+
+
 const initialState = {
-   test: null,
+   initComplete: false,
    loading: false,
-   subPages: [],
    tabPages: [],
    currentPage: Routes.getDefaultPage(),
    activeTab: null,
@@ -16,80 +17,67 @@ const initialState = {
 
 export const state = { ...initialState };
 
+ 
+
 const getters = {
+   initComplete() {
+      return state.initComplete;
+   },
    loading() {
       return state.loading;
-   },
-   isPlus() {
-      if(PageManager) return PageManager.isPlus;
-      return false;
-   },
-   subPages() {
-      return state.subPages;
    },
    activeTabName() {
       if(state.activeTab) return state.activeTab.name;
       return '';
    },
+   currentPage() {
+      return state.currentPage;
+   }
 };
 
 const actions = {
-   [INIT](context, data) {
-      let user = data.user;
-      let page = data.page;
+   [INIT](context, { user, page }) {
+      
+      context.commit(SET_CURRENT_PAGE, page);
 
       let tabPages = Routes.getTabPages(user);
-      context.commit(SET_TAB_PAGES, tabPages);
+      context.commit(SET_TAB_PAGES, tabPages);      
 
-      let subPages = Routes.getSubPages(page.name, user);
-      context.commit(SET_SUB_PAGES, subPages);
+      let tab = tabPages.find(item => item.name === page.name);
+      if(tab) context.commit(SET_ACTIVE_TAB, tab);
+      else context.commit(SET_ACTIVE_TAB, tabPages[0]);
 
-      context.commit(SET_CURRENT_PAGE, page);
-      if(getters.isPlus()) {
-         
-      }else{
-         let tab = tabPages.find(item => item.name === page.name);
-         if(tab) context.commit(SET_ACTIVE_TAB, tab);
-      }
+      context.commit(SET_INIT_COMPLETE, true);
+
+      if(isPlus()) context.dispatch(INIT_PLUS, { user, page });
       
    },
-   [GO_TO_PAGE](context, name) {
-      console.log(GO_TO_PAGE);
-      if(getters.isPlus){
-         let page = Routes.findPage(name);
-         if(!page) Utils.pageNotFound(name);
-
-         context.dispatch(CHECK_AUTH, page)
-         .then(result => {
-            if(result.auth){
-               context.dispatch(INIT, { page, user: result.user });
-            } 
-            else throw new Error('權限不足');
-         })
-         .catch(error => {
-            console.log(error);
-         })
-      }else {
-         window.location.href = page.view;
-      }
+   [GO_TO_PAGE](context, data) {
+      if(isPlus()) return;
       
+      if(data.view) window.location.href = data.view;
+      else {
+         let page = Routes.findPage(data.name);
+         if(page) window.location.href = page.view;
+         else Utils.pageNotFound(data.name);
+      }
    },
    [FETCH_TAB_PAGES](context, user) {
       let tabPages = Routes.getTabPages(user);
       context.commit(SET_TAB_PAGES, tabPages);
    },
-   [SELECT_TAB](context, item) {
-      if(getters.isPlus()) {
-         PageManager.switchTab(item.name, getters.activeTabName());
-      }else{
-         window.location.href = item.view;
-      }
-      context.commit(SET_ACTIVE_TAB, item);
+   [SELECT_TAB](context, { user, page }) {
+      let currentPage = context.state.currentPage;
+      context.commit(SET_ACTIVE_TAB, page);
+      context.dispatch(GO_TO_PAGE, { user, page, currentPage });
    }
 };
 
 
 const mutations = {
+   [SET_INIT_COMPLETE](state, val) {
+      state.initComplete = val;
+   },
    [SET_ERROR](state, errors) {
       state.errorList.record(errors);
    },

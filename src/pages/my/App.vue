@@ -7,7 +7,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-
+import { PLUS_READY, PRE_LOAD } from '@/store/actions.type';
 import My from './components/My';
 import MFooter from '@/components/FootTab';
 
@@ -19,19 +19,21 @@ export default {
 	},
 	data() {
       return {
-         name: 'my',
-         ready: false
+         name: 'my'
       };
    },
    computed: {
-		...mapGetters(['isPlus'])
+      ...mapGetters(['isPlus', 'initComplete', 'plusReady']),
+      ready() {
+         if(this.isPlus) return this.plusReady;
+         return this.initComplete;
+      }
    },
 	created() {
-      Utils.onPageCreated(this, this.isPlus);
-      
-   },
-   methods: {
-      
+      Utils.onPageCreated(this);
+      Bus.$on(PLUS_READY, () => {
+			this.$store.dispatch(PRE_LOAD);
+		});
    }
    
 };

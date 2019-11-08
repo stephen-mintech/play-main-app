@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import plus from './modules/plus.module';
 import app from './modules/app.module';
 import auth from './modules/auth.module';
 import home from './modules/home.module';
@@ -12,6 +13,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
    modules: {
+      plus,
       app,
       auth,
       home,

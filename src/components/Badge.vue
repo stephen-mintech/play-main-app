@@ -1,0 +1,28 @@
+<template>
+   <div>
+
+   </div>
+</template>
+
+<script>
+   import Vue from 'vue'
+
+   export default {
+      
+   }
+</script>
+
+<style scoped>
+   .badge {
+      display: inline-block;
+      padding: .15em .4em;
+      min-width: 8px;
+      border-radius: 18px;
+      background-color: #F43530;
+      color: #FFFFFF;
+      line-height: 1.2;
+      text-align: center;
+      font-size: 12px;
+      vertical-align: middle;
+   }
+</style>

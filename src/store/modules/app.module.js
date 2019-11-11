@@ -1,16 +1,22 @@
 import Errors from '@/common/errors';
-import { INIT, INIT_PLUS, GO_TO_PAGE, FETCH_TAB_PAGES, SELECT_TAB } from '@/store/actions.type';
-import { SET_INIT_COMPLETE, SET_ERROR, CLEAR_ERROR, SET_LOADING, 
-   SET_CURRENT_PAGE, SET_SUB_PAGES, SET_TAB_PAGES, SET_ACTIVE_TAB } from '@/store/mutations.type';
+import { INIT, INIT_PLUS, GO_TO_PAGE, GO_BACK,
+   PLUS_TO_PAGE, FETCH_TAB_PAGES, SELECT_TAB
+} from '@/store/actions.type';
+
+import { SET_INIT_COMPLETE, SET_ERROR, 
+   CLEAR_ERROR, SET_LOADING, SET_IS_PLUS,
+   SET_CURRENT_PAGE, SET_LAST_PAGE, SET_SUB_PAGES,
+   SET_TAB_PAGES, SET_ACTIVE_TAB 
+} from '@/store/mutations.type';
 
 import { isPlus } from '@/utils';
-
 
 const initialState = {
    initComplete: false,
    loading: false,
    tabPages: [],
-   currentPage: Routes.getDefaultPage(),
+   currentPage: null,
+   lastPage: null,
    activeTab: null,
    errorList: new Errors(),
 };
@@ -37,39 +43,49 @@ const getters = {
 
 const actions = {
    [INIT](context, { user, page }) {
-      
       context.commit(SET_CURRENT_PAGE, page);
+      if(isPlus()) {
+         context.dispatch(INIT_PLUS, { user, page });
+      }else {
+         context.commit(SET_IS_PLUS, false);
 
-      let tabPages = Routes.getTabPages(user);
-      context.commit(SET_TAB_PAGES, tabPages);      
+         let tabPages = Routes.getTabPages(user);
+         context.commit(SET_TAB_PAGES, tabPages);
 
-      let tab = tabPages.find(item => item.name === page.name);
-      if(tab) context.commit(SET_ACTIVE_TAB, tab);
-      else context.commit(SET_ACTIVE_TAB, tabPages[0]);
+         let tab = tabPages.find(item => item.name === page.name);
+         if(tab) context.commit(SET_ACTIVE_TAB, tab);
+         else context.commit(SET_ACTIVE_TAB, tabPages[0]);
 
-      context.commit(SET_INIT_COMPLETE, true);
-
-      if(isPlus()) context.dispatch(INIT_PLUS, { user, page });
-      
+         context.commit(SET_INIT_COMPLETE, true);
+      }
    },
-   [GO_TO_PAGE](context, data) {
-      if(isPlus()) return;
-      
-      if(data.view) window.location.href = data.view;
+   [GO_TO_PAGE](context, page) {
+      console.log(GO_TO_PAGE);
+      console.log('page', page);
+      if(!page.view) page = Routes.findPage(page.name);
+      if(!page) Utils.pageNotFound(page.name);
+      console.log('isPlus()', isPlus());
+      if(isPlus()) {
+         let currentPage = context.state.currentPage;
+         context.dispatch(PLUS_TO_PAGE, { page, currentPage });
+      }else {
+         window.location.href = page.view;
+      }
+   },
+   [GO_BACK](context) {
+     
+      if(isPlus())  context.dispatch(PLUS_GO_BACK, { page, currentPage });
       else {
-         let page = Routes.findPage(data.name);
-         if(page) window.location.href = page.view;
-         else Utils.pageNotFound(data.name);
+
       }
    },
    [FETCH_TAB_PAGES](context, user) {
       let tabPages = Routes.getTabPages(user);
       context.commit(SET_TAB_PAGES, tabPages);
    },
-   [SELECT_TAB](context, { user, page }) {
-      let currentPage = context.state.currentPage;
+   [SELECT_TAB](context, page) {
       context.commit(SET_ACTIVE_TAB, page);
-      context.dispatch(GO_TO_PAGE, { user, page, currentPage });
+      context.dispatch(GO_TO_PAGE, page);
    }
 };
 
@@ -98,6 +114,9 @@ const mutations = {
    },
    [SET_CURRENT_PAGE](state, page) {
       state.currentPage = page;
+   },
+   [SET_LAST_PAGE](state, page) {
+      state.lastPage = page;
    }
    
 };

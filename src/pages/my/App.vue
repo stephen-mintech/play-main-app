@@ -1,43 +1,57 @@
 <template>
-   <div id="app" v-if="ready">
-      <My />
+	<div id="app" v-if="ready">
+		<My />
       <MFooter v-if="!isPlus" />
-   </div>
+	</div>
 </template>
 
 <script>
+
 import { mapState, mapGetters } from 'vuex';
-import { PLUS_READY, PRE_LOAD } from '@/store/actions.type';
+import { PAGE_EVENT, ACTIVE_WEBVIEW } from '@/store/actions.type';
+import { isPlus } from '@/utils';
+
 import My from './components/My';
 import MFooter from '@/components/FootTab';
 
 export default {
 	name: 'App',
 	components: {
-		My,
-		MFooter
+      My,
+      MFooter
 	},
 	data() {
       return {
-         name: 'my'
+         name: 'my',
+         isPlus: isPlus(),
+         active: false
       };
    },
    computed: {
-      ...mapGetters(['isPlus', 'initComplete', 'plusReady']),
+      ...mapGetters(['initComplete']),
       ready() {
-         if(this.isPlus) return this.plusReady;
-         return this.initComplete;
+         return this.active && this.initComplete;
       }
    },
 	created() {
-      Utils.onPageCreated(this);
-      Bus.$on(PLUS_READY, () => {
-			this.$store.dispatch(PRE_LOAD);
-		});
-   }
-   
+      if(this.isPlus) {
+         window.addEventListener(PAGE_EVENT, this.pageEventHandler);
+      }else {
+         this.init();
+      }
+   },
+   methods: {
+		pageEventHandler(e) {
+         Utils.pageEventHandler(this, e);
+      },
+      init() {
+         this.active = true;
+         Utils.onPageCreated(this);
+      }
+	}
 };
 </script>
+
 
 <style lang="scss">
 @import "@/assets/scss/base.scss";

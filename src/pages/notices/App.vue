@@ -1,39 +1,57 @@
 <template>
-   <div id="app" v-if="ready">
+	<div id="app" v-if="ready">
 		<Notices />
-		<MFooter v-if="!isPlus" />
-   </div>
+      <MFooter v-if="!isPlus" />
+	</div>
 </template>
 
 <script>
+
 import { mapState, mapGetters } from 'vuex';
-import { PLUS_READY, GO_TO_PAGE } from '@/store/actions.type';
+import { PAGE_EVENT, ACTIVE_WEBVIEW } from '@/store/actions.type';
+import { isPlus } from '@/utils';
+
 import Notices from './components/Notices';
 import MFooter from '@/components/FootTab';
 
 export default {
 	name: 'App',
 	components: {
-		Notices,
-		MFooter
+      Notices,
+      MFooter
 	},
-	computed: {
-      ...mapGetters(['isPlus', 'initComplete', 'plusReady']),
-      ready() {
-         if(this.isPlus) return this.plusReady;
-         return this.initComplete;
-      }
-   },
 	data() {
       return {
-         name: 'notices'
+         name: 'notices',
+         isPlus: isPlus(),
+         active: false
       };
    },
-	created() {
-      Utils.onPageCreated(this);
+   computed: {
+      ...mapGetters(['initComplete']),
+      ready() {
+         return this.active && this.initComplete;
+      }
    },
+	created() {
+      if(this.isPlus) {
+         window.addEventListener(PAGE_EVENT, this.pageEventHandler);
+      }else {
+         this.init();
+      }
+   },
+   methods: {
+		pageEventHandler(e) {
+         Utils.pageEventHandler(this, e);
+      },
+      init() {
+         this.active = true;
+         Utils.onPageCreated(this);
+      }
+	}
 };
 </script>
+
 
 <style lang="scss">
 @import "@/assets/scss/base.scss";

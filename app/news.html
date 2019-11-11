@@ -12,6 +12,17 @@
 	<div id="app"></div>
 	<!-- built files will be auto injected -->
 	<script src="static/js/mui.min.js"></script>
+	<script>
+		function pageEvent(pageName, name, data){
+			var payload = {
+				pageName: pageName,
+				name: name,
+				data: data
+			};
+			var event = new CustomEvent('pageEvent', { 'detail': payload });
+			window.dispatchEvent(event);
+		}
+	</script>
 <script type="text/javascript" src="dist/js/chunk-vendors.js"></script><script type="text/javascript" src="dist/js/chunk-common.js"></script><script type="text/javascript" src="dist/js/news.js"></script></body>
 
 </html>

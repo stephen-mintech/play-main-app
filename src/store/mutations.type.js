@@ -4,11 +4,13 @@ export const SET_ERROR = 'setError';
 export const CLEAR_ERROR = 'clearError';
 export const SET_LOADING = 'setLoading';
 export const SET_CURRENT_PAGE = 'setCurrentPage';
+export const SET_LAST_PAGE = 'setLastPage';
 export const SET_SUB_PAGES = 'setSubPages';
 export const SET_TAB_PAGES = 'setTabPages';
 export const SET_ACTIVE_TAB = 'setActiveTab';
 
 //plus.module
+export const SET_PAGE = 'setPage';
 export const SET_IS_PLUS = 'setIsPlus';
 export const SET_PLUS_READY = 'setPlusReady';
 

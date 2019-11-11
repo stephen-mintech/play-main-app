@@ -7,7 +7,11 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { PLUS_READY, INIT_WEBVIEW, GO_TO_PAGE } from '@/store/actions.type';
+import { INDEX_EVENT, PLUS_READY, INIT_WEBVIEW,
+	GO_TO_PAGE 
+} from '@/store/actions.type';
+
+import { isPlus } from '@/utils';
 import MFooter from '@/components/FootTab';
 
 export default {
@@ -17,35 +21,40 @@ export default {
 	},
 	data() {
 		return {
-			name: 'index'
+			name: 'index',
+			isPlus: isPlus()			
 		};
 	},
 	computed: {
-      ...mapGetters(['isPlus', 'initComplete', 'plusReady']),
+      ...mapGetters(['initComplete', 'plusReady']),
       ready() {
          if(this.isPlus) return this.plusReady;
          return this.initComplete;
       }
    },
 	created() {
-		window.addEventListener('bus', this.busEventHandler);
+		if(this.isPlus) {
+			window.addEventListener(INDEX_EVENT, this.indexEventHandler);
+
+			Bus.$on(PLUS_READY, () => {
+				let homePage = { name: 'home' };
+				this.$store.dispatch(INIT_WEBVIEW, homePage.name);
+				
+				this.$store.dispatch(GO_TO_PAGE, homePage);
+
+				plus.navigator.closeSplashscreen();
+				// 关闭全屏
+				plus.navigator.setFullscreen(false);
+			});
+		}
 
 		Utils.onPageCreated(this);
-
-
-		Bus.$on(PLUS_READY, () => {
-			let showWebviewName = 'home';
-			this.$store.dispatch(INIT_WEBVIEW, showWebviewName);
-
-			plus.navigator.closeSplashscreen();
-			// 关闭全屏
-			plus.navigator.setFullscreen(false);
-		});
 		
 	},
 	methods: {
-		busEventHandler(e) {
-			console.log('payload in vue', e.detail	);
+		indexEventHandler(e) {
+			let name = e.detail.name;
+			this.$store.dispatch(name, e.detail.data);
 		},
 		goPage(e){
 			console.log('goPage in vue', e);

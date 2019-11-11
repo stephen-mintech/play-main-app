@@ -6,14 +6,26 @@
 	<title>Ranking</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 	<meta name="misapplication-tap-highlight" content="no" />
+	<link href="static/css/ranking.css" rel="stylesheet" />
 </head>
 
-<body>
-	<div id="container" class="container">
-		<div id="app"></div>
-	</div>
+<body> 
+	
+	<div id="app"></div>
+	
 	<!-- built files will be auto injected -->
 	<script src="static/js/mui.min.js"></script>
+	<script>
+		function pageEvent(pageName, name, data){
+			var payload = {
+				pageName: pageName,
+				name: name,
+				data: data
+			};
+			var event = new CustomEvent('pageEvent', { 'detail': payload });
+			window.dispatchEvent(event);
+		}
+	</script>
 </body>
 
 </html>

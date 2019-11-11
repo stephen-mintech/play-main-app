@@ -1,4 +1,4 @@
-import { CHECK_AUTH, INIT } from '@/store/actions.type';
+import { CHECK_AUTH, INIT, ACTIVE_WEBVIEW } from '@/store/actions.type';
 
 export const onPageCreated = (vm) => {
 
@@ -16,4 +16,25 @@ export const onPageCreated = (vm) => {
    .catch(error => {
       console.log(error);
    })
+}
+
+
+export const pageEventHandler = (vm, e) => {
+   console.log('pageEventHandler');
+   console.log('pageName', e.detail.pageName);
+   console.log('vm.name', vm.name);
+
+   console.log('name', e.detail.name);
+
+   let pageName = e.detail.pageName;
+   // 只處理發佈給此頁面的事件
+   if(pageName !== vm.name) return;
+
+
+   let name = e.detail.name;
+   if(name === ACTIVE_WEBVIEW) {
+      vm.init();
+   } 
+   else vm.$store.dispatch(name, e.detail.data);
+
 }

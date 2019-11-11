@@ -1,38 +1,57 @@
 <template>
-   <div id="app" v-if="ready">
-      <Profile />
-   </div>
+	<div id="app" v-if="ready">
+		<Profile />
+      <MFooter v-if="!isPlus" />
+	</div>
 </template>
 
 <script>
+
 import { mapState, mapGetters } from 'vuex';
+import { PAGE_EVENT, ACTIVE_WEBVIEW } from '@/store/actions.type';
+import { isPlus } from '@/utils';
 
 import Profile from './components/Profile';
+import MFooter from '@/components/FootTab';
 
 export default {
 	name: 'App',
 	components: {
-		Profile
+      Profile,
+      MFooter
 	},
 	data() {
       return {
-         name: 'Profile',
-         ready: false
+         name: 'profile',
+         isPlus: isPlus(),
+         active: false
       };
    },
    computed: {
-		...mapGetters(['isPlus'])
+      ...mapGetters(['initComplete']),
+      ready() {
+         return this.active && this.initComplete;
+      }
    },
 	created() {
-      Utils.onPageCreated(this, this.isPlus);
-      
+      if(this.isPlus) {
+         window.addEventListener(PAGE_EVENT, this.pageEventHandler);
+      }else {
+         this.init();
+      }
    },
    methods: {
-      
-   }
-   
+		pageEventHandler(e) {
+         Utils.pageEventHandler(this, e);
+      },
+      init() {
+         this.active = true;
+         Utils.onPageCreated(this);
+      }
+	}
 };
 </script>
+
 
 <style lang="scss">
 @import "@/assets/scss/base.scss";

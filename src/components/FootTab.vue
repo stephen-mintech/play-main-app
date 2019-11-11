@@ -49,13 +49,10 @@ export default {
 			if(item.name === 'notices') return 3;
 			return '';
 		},
-		onSelected(item) {
-			if(item.name === this.activeTab.name) return;
+		onSelected(page) {
+			if(page.name === this.activeTab.name) return;
 			
-			this.$store.dispatch(SELECT_TAB, { user: this.currentUser, page: item });
-
-			//PageManager.switchTab(item.name, this.activeTabName);
-			//PageManager.invoke(item.name, 'event_update');
+			this.$store.dispatch(SELECT_TAB, page);
 		}
 	}
 	

@@ -2,7 +2,7 @@
 	<div>
       <Spacer />
       <div class="card-content" style="padding-top:10px;">
-         <MyPofile />
+         <MyPofile :model="model" @edit="editProfile" />
       </div>
       <Spacer />
       <MySummary />
@@ -24,6 +24,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import { GO_TO_PAGE } from '@/store/actions.type';
 
 import { Panel, Icon, Button, Cell, Grid, GridItem, CellGroup, Divider } from 'vant';
 Vue.use(Panel).use(Icon).use(Button).use(Cell).use(Grid)
@@ -46,11 +47,17 @@ export default {
    },
    data() {
       return {
-         hide: ['profile']
+         hide: ['profile'],
+         model: {
+            name: 'Stephen 阿水',
+            type: '正式會員',
+            subTitle: '這人很懶,沒有寫介紹',
+            img: 'http://hotfix.7cplay.com/zuzucustom/titleimg/8c829d86-9dd0-43bd-a008-a960dedf3d7e.jpg'
+         }
       };
    },
    computed: {
-      ...mapGetters(['subPages']),
+      ...mapGetters(['currentUser','subPages']),
       links() {
          if(this.subPages) {
             return this.subPages.filter(item => !this.hide.includes(item.name));
@@ -71,7 +78,11 @@ export default {
       },
       onLinkSelected(name) {
          let page = this.links.find(item => item.name === name);
-         console.log('onLinkSelected', page);
+         this.$store.dispatch(GO_TO_PAGE,  page);
+      },
+      editProfile() {
+         console.log('editProfile');
+         this.$store.dispatch(GO_TO_PAGE,  { name: 'profile' });
       }
       
    }

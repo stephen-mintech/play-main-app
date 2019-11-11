@@ -7,7 +7,9 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { PLUS_READY, GO_TO_PAGE } from '@/store/actions.type';
+import { PAGE_EVENT, ACTIVE_WEBVIEW } from '@/store/actions.type';
+import { isPlus } from '@/utils';
+
 import News from './components/News';
 import MFooter from '@/components/FootTab';
 
@@ -19,22 +21,32 @@ export default {
 	},
 	data() {
       return {
-         name: 'news'
+         name: 'news',
+         isPlus: isPlus(),
+         active: false
       };
    },
    computed: {
-      ...mapGetters(['isPlus', 'initComplete', 'plusReady']),
+      ...mapGetters(['initComplete']),
       ready() {
-         if(this.isPlus) return this.plusReady;
-         return this.initComplete;
+         return this.active && this.initComplete;
       }
    },
 	created() {
-      Utils.onPageCreated(this);
-      
+      if(this.isPlus) {
+         window.addEventListener(PAGE_EVENT, this.pageEventHandler);
+      }else {
+         this.init();
+      }
    },
    methods: {
-      
+      pageEventHandler(e) {
+         Utils.pageEventHandler(this, e);
+      },
+      init() {
+         this.active = true;
+         Utils.onPageCreated(this);
+      } 
    }
    
 };

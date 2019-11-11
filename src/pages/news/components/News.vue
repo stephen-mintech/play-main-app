@@ -1,5 +1,9 @@
 <template>
 	<div class="page-content">
+      <div class="news-add-container">
+         <NewsAdd />
+      </div>
+      
       <van-tabs v-model="active" @change="onTabChanged">
          <van-tab name="latest" title="最新">
             <NewsItem v-for="(item,index) in newsList" :model="item" :key="index"
@@ -39,9 +43,9 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { FETCH_NEWS, GET_NEWS } from '@/store/actions.type';
-import PageManager from 'page-manager';
 import mui from 'mui';
 
+import NewsAdd from '@/components/news/Add';
 import NewsItem from '@/components/news/Item';
 import { NavBar, Tab, Tabs } from 'vant';
 Vue.use(Tab).use(Tabs);
@@ -55,7 +59,8 @@ Vue.use(Tab).use(Tabs);
 export default {
    name: 'News',
    components: {
-		NewsItem
+      NewsAdd,
+      NewsItem
 	},
    data() {
       return {
@@ -140,8 +145,18 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/var';
+
+.news-add-container {
+   padding-top : 5px;
+   width : 100%;
+   position : absolute;
+   left : 0px;
+   height : 40px;
+   z-index: 5;
+}
+
 .van-tabs.van-tabs--line {
-   padding-top: $padding-main;
+   padding-top: $padding-nav;
 }
 </style>
 

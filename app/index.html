@@ -16,12 +16,12 @@
 		<!-- built files will be auto injected -->
 		<script src="static/js/mui.min.js"></script>
 		<script>
-			function busEvent(name, data){
+			function indexEvent(name, data){
 				var payload = {
 					name: name,
 					data: data
 				};
-            var event = new CustomEvent('bus', { 'detail': payload });
+            var event = new CustomEvent('indexEvent', { 'detail': payload });
             window.dispatchEvent(event);
          }
 		</script>

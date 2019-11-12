@@ -1,10 +1,21 @@
+
+import variables from '@/assets/scss/var.scss';
+
+const mainColor = variables.colorMain;
+const barHeight = variables.barHeight;
+
 export const APP_UI = {
-   barHeight: 44,
+   barHeight: barHeight,
    top: '0px', //设置距离顶部的距离
    bottom: '49px', //设置距离底部的距离
    statusbarColor: '#000000',
-   mainColor: 'rgb(220, 40, 115)',
+   mainColor: mainColor,
    aniShow : 'pop-in',
+};
+
+export const NAVBAR_UI = {
+   height: barHeight,
+   backgroundColor: mainColor
 };
 
 export const PULL_REFRESH_UI = {

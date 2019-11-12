@@ -1,6 +1,6 @@
 <template>
 	<div id="app" v-if="ready">
-		<Profile @back="goBack" />
+		<Damn />
       <MFooter v-if="!isPlus" />
 	</div>
 </template>
@@ -8,21 +8,21 @@
 <script>
 
 import { mapState, mapGetters } from 'vuex';
-import { PAGE_EVENT, ACTIVE_WEBVIEW, GO_BACK } from '@/store/actions.type';
+import { PAGE_EVENT, ACTIVE_WEBVIEW } from '@/store/actions.type';
 import { isPlus } from '@/utils';
 
-import Profile from './components/Profile';
+import Damn from './components/Damn';
 import MFooter from '@/components/FootTab';
 
 export default {
 	name: 'App',
 	components: {
-      Profile,
+      Damn,
       MFooter
 	},
 	data() {
       return {
-         name: 'profile',
+         name: 'damn',
          isPlus: isPlus(),
          active: false
       };
@@ -47,9 +47,6 @@ export default {
       init() {
          this.active = true;
          Utils.onPageCreated(this);
-      },
-      goBack() {
-         this.$store.dispatch(GO_BACK);
       }
 	}
 };

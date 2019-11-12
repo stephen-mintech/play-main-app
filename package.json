@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "init-page": "babel-node -- ./init-page.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --no-clean",
     "lint": "vue-cli-service lint",
@@ -30,6 +31,10 @@
     "weui.js": "^1.2.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.2",
+    "@babel/node": "^7.7.0",
+    "@babel/preset-env": "^7.7.1",
     "@vue/cli-plugin-babel": "^4.0.0",
     "@vue/cli-plugin-eslint": "^4.0.0",
     "@vue/cli-service": "^4.0.0",

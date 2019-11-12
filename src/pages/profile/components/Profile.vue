@@ -66,9 +66,7 @@ export default {
       };
    },
    computed: {
-      ...mapState({
-         currentPage: state => state.app.currentPage
-      }),
+      ...mapGetters(['currentPage'])
    },
    created() {
 
@@ -86,7 +84,7 @@ export default {
          
       },
       goBack() {
-			mui.back();
+			this.$emit('back');
       },
       onColorSelected(item) {
          this.selectedColor = { ...item };

@@ -1,6 +1,6 @@
-import { INIT_PLUS, INIT_WEBVIEW, ACTIVE_WEBVIEW, 
-   INDEX_EVENT, PAGE_EVENT, PLUS_READY, PRE_LOAD,
-   PLUS_TO_PAGE, PLUS_GO_BACK   
+import { INIT_PLUS, INIT_WEBVIEW, ACTIVE_WEBVIEW, UN_ACTIVE_WEBVIEW,
+   INDEX_EVENT, PAGE_EVENT, PLUS_READY, PRE_LOAD_WEBVIEW,
+   UNLOAD_WEBVIEW, PLUS_TO_PAGE, PLUS_GO_BACK   
 } from '@/store/actions.type';
 
 import { SET_PAGE, SET_IS_PLUS, SET_PLUS_READY, SET_INIT_COMPLETE,
@@ -70,6 +70,28 @@ const actions = {
       console.log('page',page);
       context.commit(SET_PAGE, page);
       context.commit(SET_IS_PLUS, true);
+
+      let subPages = Routes.getSubPages(page.name, user);
+      context.commit(SET_SUB_PAGES, subPages);
+
+
+      mui.plusReady(() => {
+         
+         setStatusBarBg();
+         
+         // 隐藏滚动条
+         plus.webview.currentWebview().setStyle({ scrollIndicator: 'none' });
+         // 强制竖屏
+         plus.screen.lockOrientation('portrait-primary');
+         
+         if(isIndexContext(context)) context.dispatch(INIT_WEBVIEW, 'home');
+         else context.dispatch(PRE_LOAD_WEBVIEW, { subPages });
+         
+
+         context.commit(SET_PLUS_READY, true);
+         context.commit(SET_INIT_COMPLETE, true);
+         Bus.$emit(PLUS_READY);
+      });
       
       if(isIndexContext(context)) {
          let tabPages = Routes.getTabPages(user);
@@ -78,25 +100,8 @@ const actions = {
 
          context.commit(SET_CURRENT_PAGE, tabPages[0]);
       }
-
-      let subPages = Routes.getSubPages(page.name, user);
-      context.commit(SET_SUB_PAGES, subPages);
       
-      mui.plusReady(() => {
-         console.log('plusReady');
-         setStatusBarBg();
-         
-         // 隐藏滚动条
-         plus.webview.currentWebview().setStyle({ scrollIndicator: 'none' });
-         // 强制竖屏
-         plus.screen.lockOrientation('portrait-primary');
-         
-         context.dispatch(PRE_LOAD);
-
-         context.commit(SET_PLUS_READY, true);
-         context.commit(SET_INIT_COMPLETE, true);
-         Bus.$emit(PLUS_READY);
-      });
+      
       
    },
    [INIT_WEBVIEW](context, showName) {
@@ -126,19 +131,37 @@ const actions = {
       }
       
    },
-   [PRE_LOAD](context) {
-      console.log(PRE_LOAD);
+   [PRE_LOAD_WEBVIEW](context, { subPages }) {
+      
+      if(!isIndexContext(context)) {
+         //將事件發佈給index處理
+         context.dispatch(INDEX_EVENT, {
+            name: PRE_LOAD_WEBVIEW,
+            data: { subPages }
+         });
+
+         return;
+      }
+
+      console.log(PRE_LOAD_WEBVIEW);
+
+      //context.dispatch(UNLOAD_WEBVIEW, subPages);
+     
       //預先載入子頁面
-      let subPages = context.state.subPages;
-      console.log('subPages', subPages);
       subPages.forEach(page => {
          let id = page.name;
          let url = page.view;
          let view = mui.preload({
             id, url
          });
-         console.log(view);
+         //console.log(view);
       })
+
+      
+
+      
+
+      //關閉不需要的子頁面
 
       // pages.forEach(pagepath => {
       //    let page = mui.preload({
@@ -152,6 +175,22 @@ const actions = {
 
       //    result.push(page);
    },
+   [UNLOAD_WEBVIEW](context, subPages) {
+      console.log(UNLOAD_WEBVIEW);
+      console.log('subPages', subPages);
+     
+      let reserve = [getAppid(), 'home'];
+      //保留currentPage子頁面
+      let subs = subPages.map(item => item.name);
+      //保留菜單頁面
+      let tabs = context.getters.tabPages.map(item => item.name);
+
+      reserve = [getAppid()].concat(subs).concat(tabs);
+      console.log('reserve', reserve);
+      let unloadViews = plus.webview.all().filter(item => !reserve.includes(item.id));
+      console.log('unloadViews', unloadViews);
+      unloadViews.forEach(view => view.close());
+   },
    [INDEX_EVENT](context, { name, data }) {
       let indexView = getIndexWebview();
       indexView.evalJS(`${INDEX_EVENT}('${name}', ${JSON.stringify(data)})`);
@@ -159,19 +198,31 @@ const actions = {
    [PAGE_EVENT](context, { webview, name, data }) {
       webview.evalJS(`${PAGE_EVENT}('${webview.id}', '${name}', ${JSON.stringify(data)})`);
    },
-   [PLUS_TO_PAGE](context, { page, currentPage }) {
+   [PLUS_TO_PAGE](context, page) {
       if(!isIndexContext(context)) {
          //將事件發佈給index處理
          context.dispatch(INDEX_EVENT, {
             name: PLUS_TO_PAGE,
-            data: { page, currentPage }
+            data: page
          });
 
          return;
       }
+
+      let lastPage = context.getters.lastPage;
+      console.log('lastPage', lastPage);
+      //將事件傳遞到last，關閉該頁面         
+      // context.dispatch(PAGE_EVENT, {
+      //    webview: plus.webview.getWebviewById(lastPage.name),
+      //    name: UN_ACTIVE_WEBVIEW,
+      //    data: {}
+      // });
+
+
+      context.commit(SET_CURRENT_PAGE, page);
+
       console.log(PLUS_TO_PAGE);
       console.log('page',page);
-      console.log('currentPage',currentPage);
          
       let id = page.name;
 
@@ -203,48 +254,21 @@ const actions = {
          //    }
          // });
       }
-
-
-
-      //console.log('page:', page);
-      //获取当前页面所属的Webview窗口对象
-      //var currentWebview = plus.webview.currentWebview();
-      //console.log('currentWebview', currentWebview);
-      // let webview = plus.webview.getWebviewById(page.name);
-      // if(webview) {
-      //    webview.show();
-      // }
-     
-
-      //console.log('all webviews:', plus.webview.all());
-      
-      //plus.webview.show(name);
-
-      // let page = Routes.findPage(name);
-      // if(!page) Utils.pageNotFound(name);
-
-      // context.dispatch(CHECK_AUTH, page)
-      // .then(result => {
-      //    if(result.auth){
-      //       context.dispatch(INIT, { page, user: result.user });
-      //    } 
-      //    else throw new Error('權限不足');
-      // })
-      // .catch(error => {
-      //    console.log(error);
-      // })
       
    },
-   [PLUS_GO_BACK](context, { page, currentPage }) {
-      if(!isIndexContext(context)) {
+   [PLUS_GO_BACK](context) {
+
+      if(isIndexContext(context)) {
+         context.commit(SET_CURRENT_PAGE, context.getters.lastPage);
+      }else {
+         mui.back();
          //將事件發佈給index處理
          context.dispatch(INDEX_EVENT, {
-            name: PLUS_TO_PAGE,
-            data: { page, currentPage }
+            name: PLUS_GO_BACK,
+            data: {}
          });
-
-         return;
       }
+      
    }
 };
 

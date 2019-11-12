@@ -49,7 +49,6 @@ export default {
 		}
 
 		Utils.onPageCreated(this);
-		
 	},
 	methods: {
 		indexEventHandler(e) {

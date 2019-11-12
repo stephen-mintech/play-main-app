@@ -9,10 +9,12 @@ export const SELECT_TAB = 'selectTab';
 export const INIT_PLUS = 'initPlus';
 export const INIT_WEBVIEW = 'initWebview';
 export const ACTIVE_WEBVIEW = 'activeWebview';
+export const UN_ACTIVE_WEBVIEW = 'unActiveWebview';
 export const INDEX_EVENT = 'indexEvent';
 export const PAGE_EVENT = 'pageEvent';
 export const PLUS_READY = 'plusReady';
-export const PRE_LOAD = 'preLoad';
+export const PRE_LOAD_WEBVIEW = 'preLoadWebview';
+export const UNLOAD_WEBVIEW = 'unloadWebview';
 export const PLUS_TO_PAGE = 'plusToPage';
 export const PLUS_GO_BACK = 'plusGoBack';
 

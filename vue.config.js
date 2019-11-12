@@ -47,6 +47,10 @@ module.exports = {
    },
 	chainWebpack: config => {
 		config.module.rules.delete('eslint');
+	// 	config.module
+   //  .rule('svg')
+   //    .use('svg-sprite-loader')
+   //    .loader('svg-sprite-loader')
 	},
 	configureWebpack: config => {
 		Object.assign(config, {

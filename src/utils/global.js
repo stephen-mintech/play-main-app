@@ -1,4 +1,4 @@
-import { CHECK_AUTH, INIT, ACTIVE_WEBVIEW } from '@/store/actions.type';
+import { CHECK_AUTH, INIT, ACTIVE_WEBVIEW, UN_ACTIVE_WEBVIEW } from '@/store/actions.type';
 
 export const onPageCreated = (vm) => {
 
@@ -34,6 +34,8 @@ export const pageEventHandler = (vm, e) => {
    let name = e.detail.name;
    if(name === ACTIVE_WEBVIEW) {
       vm.init();
+   }else if(name === UN_ACTIVE_WEBVIEW) {
+      vm.active = false;
    } 
    else vm.$store.dispatch(name, e.detail.data);
 

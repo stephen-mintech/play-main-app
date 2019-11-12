@@ -1,5 +1,5 @@
 import { FOR_ALL, GUEST_ONLY, USER_ONLY, ADMIN_ONLY } from './route.type';
-import { DEFAULT_PAGE_NAME } from '@/config';
+const DEFAULT_PAGE_NAME = 'home';
 
 var applinks = [
    {
@@ -276,7 +276,7 @@ let appRoutes = applinks.concat(adminlinks)
 // for(let i = 0; i < appRoutes.length; i++){
 //    appRoutes[i].meta.order = i;
 // }
-
+const getAllPages = () => appRoutes;
 
 
 const getLinks = (user = null) => {
@@ -322,6 +322,7 @@ const findPageByPath = (path, user = null) => {
 }
 
 export default {
+   getAllPages, 
    findPage,
    getDefaultPage,
    getRootPages,

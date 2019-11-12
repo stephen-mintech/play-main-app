@@ -1,3 +1,4 @@
+
 $color-main: rgb(220, 40, 115) !default;
 $color-sub: #1989fa !default;
 $color1: #311455 !default;
@@ -10,6 +11,7 @@ $color-shade: #eb2000;
 $color-yellow: #ecad32;
 $color-bg: #ddd;
 
+$bar-height: 44px;
 $padding-nav: 45px !default;
 $padding-main: 0.1rem !default;
 
@@ -20,3 +22,10 @@ $main-bg-color: #f4f4f4;
 $content-bg-color: #fff;
 
 $main-title-font-size: 17px;
+
+
+:export {
+   colorMain: $color-main;
+   colorSub: $color-sub;
+   barHeight: $bar-height
+}

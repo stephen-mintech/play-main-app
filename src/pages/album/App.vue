@@ -1,52 +1,58 @@
 <template>
-   <div id="app" v-if="ready">
-      <Album />
-   </div>
+	<div id="app" v-if="ready">
+		<Album />
+      <MFooter v-if="!isPlus" />
+	</div>
 </template>
 
 <script>
+
 import { mapState, mapGetters } from 'vuex';
+import { PAGE_EVENT, ACTIVE_WEBVIEW } from '@/store/actions.type';
+import { isPlus } from '@/utils';
 
 import Album from './components/Album';
+import MFooter from '@/components/FootTab';
 
 export default {
 	name: 'App',
 	components: {
-		Album
+      Album,
+      MFooter
 	},
 	data() {
       return {
          name: 'album',
-         ready: false
+         isPlus: isPlus(),
+         active: false
       };
    },
    computed: {
-		...mapGetters(['isPlus'])
+      ...mapGetters(['initComplete']),
+      ready() {
+         return this.active && this.initComplete;
+      }
    },
 	created() {
-      Utils.onPageCreated(this, this.isPlus);
-      
+      if(this.isPlus) {
+         window.addEventListener(PAGE_EVENT, this.pageEventHandler);
+      }else {
+         this.init();
+      }
    },
    methods: {
-      
-   }
-   
+		pageEventHandler(e) {
+         Utils.pageEventHandler(this, e);
+      },
+      init() {
+         this.active = true;
+         Utils.onPageCreated(this);
+      }
+	}
 };
 </script>
 
-<style lang="scss" >
-@import "@/assets/scss/var";
-@import "@/assets/scss/common";
-@import "@/assets/scss/base.scss";
-html,
-body {
-  background: #dddddd;
-  height: 100%;
-}
 
-#app,
-.page-content {
-  background: #dddddd;
-  min-height: 100%;
-}
+<style lang="scss">
+@import "@/assets/scss/base.scss";
 </style>

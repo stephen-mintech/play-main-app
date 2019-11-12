@@ -3,7 +3,7 @@
 
 .van-nav-bar.van-nav-bar {
   z-index: 999 !important;
-  height: 44px;
+  height: $bar-height;
   line-height: 44px;
   border-bottom: none;
   background: $color-main;

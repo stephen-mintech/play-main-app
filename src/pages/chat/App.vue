@@ -1,13 +1,14 @@
 <template>
-   <div id="app">
+	<div id="app" v-if="initCompleted">
 		<Chat />
-		<MFooter v-if="!isPlus" />
-   </div>
+      <MFooter v-if="!isPlus" />
+	</div>
 </template>
 
 <script>
+
 import { mapState, mapGetters } from 'vuex';
-import { INIT } from '@/store/actions.type';
+import { PAGE_EVENT } from '@/store/actions.type';
 
 import Chat from './components/Chat';
 import MFooter from '@/components/FootTab';
@@ -15,23 +16,36 @@ import MFooter from '@/components/FootTab';
 export default {
 	name: 'App',
 	components: {
-		Chat,
-		MFooter
-	},
-	computed: {
-      ...mapGetters(['isPlus'])
+      Chat,
+      MFooter
 	},
 	data() {
       return {
-         name: 'chat',
-         ready: false
+         name: 'chat'
       };
    },
-	created() {
-      Utils.onPageCreated(this, this.isPlus);
+   computed: {
+      ...mapGetters(['initCompleted', 'isPlus'])
    },
+	created() {
+      if(this.isPlus) {
+         window.addEventListener(PAGE_EVENT, this.pageEventHandler);
+      }else {
+         this.init();
+      }
+   },
+   methods: {
+		pageEventHandler(e) {
+         console.log('app pageEventHandler', e);
+         Utils.pageEventHandler(this, e);
+      },
+      init(active = true) {
+         if(active) Utils.onPageCreated(this);
+      }
+	}
 };
 </script>
+
 
 <style lang="scss">
 @import "@/assets/scss/base.scss";

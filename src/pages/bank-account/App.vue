@@ -1,38 +1,51 @@
 <template>
-   <div id="app" v-if="ready">
-      <BankAccount />
-   </div>
+	<div id="app" v-if="initCompleted">
+		<BankAccount />
+      <MFooter v-if="!isPlus" />
+	</div>
 </template>
 
 <script>
+
 import { mapState, mapGetters } from 'vuex';
+import { PAGE_EVENT } from '@/store/actions.type';
 
 import BankAccount from './components/BankAccount';
+import MFooter from '@/components/FootTab';
 
 export default {
 	name: 'App',
 	components: {
-		BankAccount
+      BankAccount,
+      MFooter
 	},
 	data() {
       return {
-         name: 'bank-account',
-         ready: false
+         name: 'bank-account'
       };
    },
    computed: {
-		...mapGetters(['isPlus'])
+      ...mapGetters(['initCompleted', 'isPlus'])
    },
 	created() {
-      Utils.onPageCreated(this, this.isPlus);
-      
+      if(this.isPlus) {
+         window.addEventListener(PAGE_EVENT, this.pageEventHandler);
+      }else {
+         this.init();
+      }
    },
    methods: {
-      
-   }
-   
+		pageEventHandler(e) {
+         console.log('app pageEventHandler', e);
+         Utils.pageEventHandler(this, e);
+      },
+      init(active = true) {
+         if(active) Utils.onPageCreated(this);
+      }
+	}
 };
 </script>
+
 
 <style lang="scss">
 @import "@/assets/scss/base.scss";

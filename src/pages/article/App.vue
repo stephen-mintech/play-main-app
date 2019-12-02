@@ -1,44 +1,52 @@
 <template>
-	<div id="app">
-		<Article ref="article" :id="id" />
+	<div id="app" v-if="initCompleted">
+		<Article />
+      <MFooter v-if="!isPlus" />
 	</div>
 </template>
 
 <script>
-import { getQuery, log } from '@/utils';
+
+import { mapState, mapGetters } from 'vuex';
+import { PAGE_EVENT } from '@/store/actions.type';
+
 import Article from './components/Article';
+import MFooter from '@/components/FootTab';
 
 export default {
 	name: 'App',
 	components: {
-		Article
+      Article,
+      MFooter
 	},
 	data() {
-		return {
-			id: ''
-		};
-	},
+      return {
+         name: 'article'
+      };
+   },
+   computed: {
+      ...mapGetters(['initCompleted', 'isPlus'])
+   },
 	created() {
-		// 订阅更新事件
-      window.addEventListener('event_update', event => {
-			// 获得事件参数
-			let detail = event.detail;
-			// 触发子组件更新
-			log(detail, 'event_update with detail');
-			this.id = detail.id;
-    	});
-	},
-	beforeMount() {
-		let query = getQuery();
-		if(query && query.id) this.id = query.id;
-	},
-	mounted() {
-		
+      if(this.isPlus) {
+         window.addEventListener(PAGE_EVENT, this.pageEventHandler);
+      }else {
+         this.init();
+      }
+   },
+   methods: {
+		pageEventHandler(e) {
+         console.log('app pageEventHandler', e);
+         Utils.pageEventHandler(this, e);
+      },
+      init(active = true) {
+         if(active) Utils.onPageCreated(this);
+      }
 	}
 };
 </script>
 
 
-<style lang="scss" >
+<style lang="scss">
 @import "@/assets/scss/base.scss";
 </style>

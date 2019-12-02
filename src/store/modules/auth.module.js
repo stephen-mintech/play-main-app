@@ -1,82 +1,95 @@
 import BaseService from '@/common/baseService';
 import Jwt from '@/common/jwt';
 import AuthService from '@/services/auth.service';
-import { FOR_ALL, GUEST_ONLY, USER_ONLY, ADMIN_ONLY } from '@/routes/route.type';
 
-
-import { CHECK_AUTH } from '../actions.type';
-import { SET_AUTH, PURGE_AUTH, SET_USER } from '../mutations.type';
+import { CHECK_AUTH, LOGIN, LOGOUT, REFRESH_TOKEN } from '../actions.type';
+import { SET_AUTH, PURGE_AUTH, 
+   SET_USER, SET_LOADING 
+} from '../mutations.type';
 
  
 const state = {
-   user: { id: 35, name: 'stephen'},
-   isAuthenticated: false//!!Jwt.getToken()
+   user: null
 };
 
 const getters = {
    currentUser(state) {
      return state.user;
    },
-   isAuthenticated(state) {
-     return state.isAuthenticated;
+   phoneConfirmed(state) {
+      if(!state.user) return false;
+      return true;
    }
 };
 
-const hasAdminRole = (claims) => {
-   return false;
-   // let roles = claims.roles.split(',');
-   // let adminRoles = roles.filter(role => 
-   //    role.toUpperCase() === 'DEV' || role.toUpperCase() === 'BOSS'
-   // );
-
-   // if(adminRoles && adminRoles.length) return true;
-   // return false;
-}
-
-const canVisitPage = (page, user = null) => {
-   if(page.meta.type === FOR_ALL) return true;
-   if(user) return true;
-   return false;
-}
-
 const actions = {
-   [CHECK_AUTH](context, page) {
+   [CHECK_AUTH](context) {
       return new Promise((resolve) => {
-         let accessToken = 'fakeToken';//Jwt.getToken();
+         let accessToken = Jwt.getToken();
          if(accessToken) {
-            let user = {
-               id: 35,
-               name: 'stephen'
-            };
-            context.commit(SET_USER, user); 
-            resolve({
-               user,
-               auth: canVisitPage(page, user)
-            });
-            return;
             BaseService.setHeader();
-            let claims = jwtDecode(accessToken);
-            if(hasAdminRole(claims)){
-               context.commit(SET_USER, {
-                  id: claims.id,
-                  name: claims.sub
-               }); 
-               resolve(true);
-            }else{
-               //有token沒權限,保留token
-               let destroyToken = false;
-               context.commit(PURGE_AUTH, destroyToken);
-               resolve(false);
-            }            
+            let claims = Jwt.getClaims();
+            context.commit(SET_USER, {
+               id: claims.id,
+               name: claims.sub
+            }); 
+            resolve(true);
          }else {
             context.commit(PURGE_AUTH);
-            resolve({
-               user: null,
-               auth: canVisitPage(page)
-            });
+            resolve(false);
          }
       });
    },
+   [LOGIN](context, credentials) {
+      context.commit(SET_LOADING, true);
+      return new Promise((resolve, reject) => {
+         AuthService.login(credentials)
+         .then(model => {
+            context.commit(SET_AUTH, {
+               token: model.accessToken.token,
+               refreshToken: model.refreshToken
+            }); 
+            resolve(true);
+         })
+         .catch(error => {
+            reject(Utils.resolveErrorData(error));
+         })
+         .finally(() => { 
+            context.commit(SET_LOADING, false);
+         })
+      });
+   },
+   [LOGOUT](context) {
+      context.commit(PURGE_AUTH);    
+   },
+   [REFRESH_TOKEN](context) {
+      return new Promise((resolve, reject) => {
+         let accessToken = Jwt.getToken();
+         let refreshToken = Jwt.getRefreshToken();
+         if(accessToken && refreshToken) {
+            context.commit(SET_LOADING, true);
+            AuthService.refreshToken({ accessToken, refreshToken })
+            .then(model => {
+               context.commit(SET_AUTH, {
+                  token: model.accessToken.token,
+                  refreshToken: model.refreshToken
+               });
+               context.commit(SET_LOADING, false);
+               resolve(true);
+            })
+            .catch(err => {
+               context.commit(PURGE_AUTH);
+               reject(Utils.resolveErrorData(error));        
+            })
+            .finally(() => { 
+               context.commit(SET_LOADING, false);
+            })
+         }else {
+            context.commit(PURGE_AUTH);
+            resolve(false);
+         }
+      });
+   }
 };
 
 
@@ -86,24 +99,19 @@ const mutations = {
    },
    [SET_AUTH](state, model) {
       
-      // Jwt.saveToken(model.token, model.refreshToken);
+      Jwt.saveToken(model.token, model.refreshToken);
 
-      // let claims = jwtDecode(model.token);
-      // state.user = {
-      //    id: claims.id,
-      //    name: claims.sub
-      // };
-
-      // state.isAuthenticated = true;
-      // state.errors = new Errors();
+      let claims = Jwt.getClaims();
+      console.log(claims);
+      state.user = {
+         id: claims.id,
+         name: claims.sub
+      };
       
    },
    [PURGE_AUTH](state) {
-      state.isAuthenticated = false;
       state.user = null;
-    
-      // state.errors = new Errors();
-      // Jwt.destroyToken();
+      Jwt.destroyToken();
    }
 };
 

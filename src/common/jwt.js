@@ -1,28 +1,37 @@
 import jwtDecode from 'jwt-decode';
 import moment from 'moment';
+import { IS_PLUS } from '@/config';
 
 const ID_TOKEN_KEY = 'id_token';
 const REFRESH_TOKEN_KEY = 'refresh_token';
 
-export const getToken = () => {
-   return window.localStorage.getItem(ID_TOKEN_KEY);
-};
-export const getRefreshToken = () => {
-   return window.localStorage.getItem(REFRESH_TOKEN_KEY);
+const getStorage = () => {
+   if(IS_PLUS) return plus.storage;
+   else return window.localStorage;
+}
+
+const getToken = () => getStorage().getItem(ID_TOKEN_KEY);
+
+const getClaims = () => {
+   let token = getToken();
+   if(token) return jwtDecode(token);
+   return null;   
 };
 
-export const saveToken = (token, refreshToken) => {  
-   window.localStorage.setItem(ID_TOKEN_KEY, token);
-   window.localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+const getRefreshToken = () => getStorage().getItem(REFRESH_TOKEN_KEY);
+
+const saveToken = (token, refreshToken) => {
+   getStorage().setItem(ID_TOKEN_KEY, token);
+   getStorage().setItem(REFRESH_TOKEN_KEY, refreshToken);
 };
 
-export const destroyToken = () => {
-   window.localStorage.removeItem(ID_TOKEN_KEY);
-   window.localStorage.removeItem(REFRESH_TOKEN_KEY);
+const destroyToken = () => {
+   getStorage().removeItem(ID_TOKEN_KEY);
+   getStorage().removeItem(REFRESH_TOKEN_KEY);
 };
 
-export const tokenStatus = () => {
-   let token = window.localStorage.getItem(ID_TOKEN_KEY);
+const tokenStatus = () => {
+   let token = getToken();
    if(!token) return -1;
 
    let claims = jwtDecode(token);
@@ -36,4 +45,11 @@ export const tokenStatus = () => {
 };
 
 
-export default { getToken, getRefreshToken, saveToken, destroyToken, tokenStatus };
+export default { 
+   getToken, 
+   getRefreshToken, 
+   saveToken, 
+   destroyToken, 
+   tokenStatus,
+   getClaims 
+};

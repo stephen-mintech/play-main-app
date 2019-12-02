@@ -16,7 +16,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { FETCH_PARTNERS, GET_CATEGORY } from '@/store/actions.type';
+import { FETCH_PARTNERS, GET_CATEGORY, OPEN_CHILD_PAGE } from '@/store/actions.type';
 import PageManager from 'page-manager';
 
 import Loading from '@/components/Loading';
@@ -43,7 +43,7 @@ export default {
       ...mapState({
          partnersList: state => state.partners.list
       }),
-      ...mapGetters(['isPlus', 'homeMenuItems', 'loading']),
+      ...mapGetters(['isPlus', 'homeMenuItems', 'loading', 'subPages']),
       newsRefreshElementId() {
          return getElementId(this.newsRefreshId);
       }
@@ -101,8 +101,8 @@ export default {
          this.onCategorySelected(item);         
       },
       onCategorySelected(category) {
-         PageManager.switchTab('partners', 'home');
-			PageManager.invoke('partners', 'event_update', { id: category.id }); 
+         
+         this.$store.dispatch(OPEN_CHILD_PAGE, { name: 'demo' }, { id: 3});
       }
    }
 };

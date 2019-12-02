@@ -1,5 +1,5 @@
 <template>
-	<div id="app" v-if="ready">
+	<div id="app" v-if="initCompleted">
 		<Notices />
       <MFooter v-if="!isPlus" />
 	</div>
@@ -8,8 +8,7 @@
 <script>
 
 import { mapState, mapGetters } from 'vuex';
-import { PAGE_EVENT, ACTIVE_WEBVIEW } from '@/store/actions.type';
-import { isPlus } from '@/utils';
+import { PAGE_EVENT } from '@/store/actions.type';
 
 import Notices from './components/Notices';
 import MFooter from '@/components/FootTab';
@@ -22,16 +21,11 @@ export default {
 	},
 	data() {
       return {
-         name: 'notices',
-         isPlus: isPlus(),
-         active: false
+         name: 'notices'
       };
    },
    computed: {
-      ...mapGetters(['initComplete']),
-      ready() {
-         return this.active && this.initComplete;
-      }
+      ...mapGetters(['initCompleted', 'isPlus'])
    },
 	created() {
       if(this.isPlus) {
@@ -42,11 +36,11 @@ export default {
    },
    methods: {
 		pageEventHandler(e) {
+         console.log('app pageEventHandler', e);
          Utils.pageEventHandler(this, e);
       },
-      init() {
-         this.active = true;
-         Utils.onPageCreated(this);
+      init(active = true) {
+         if(active) Utils.onPageCreated(this);
       }
 	}
 };

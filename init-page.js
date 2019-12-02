@@ -7,6 +7,7 @@ import routes from './src/routes';
 const folderPath = 'src/pages';
 const templateName = 'home';
 
+
 const types = {
    html: 'html',
    js: 'js',
@@ -15,8 +16,13 @@ const types = {
 }
 
 const capitalize = (s) => {
-   if (typeof s !== 'string') return ''
-   return s.charAt(0).toUpperCase() + s.slice(1)
+   if (typeof s !== 'string') return '';
+   let parts = s.split('-');
+   let result = '';
+   for(let i = 0; i < parts.length; i++){
+     result += parts[i].charAt(0).toUpperCase() + parts[i].slice(1)
+   }
+   return result;
 }
 
 const getTemplatePath = (ext) => {
@@ -47,78 +53,28 @@ const getSavePath = (name, ext) => {
    if(ext === types.js) return resolve(`${folderPath}/${name}/${name}.js`);
    if(ext === types.vue) return resolve(`${folderPath}/${name}/App.vue`);
    if(ext === types.component) return resolve(`${folderPath}/${name}/components/${capitalize(name)}.vue`);
-} 
+}
 
-
-
-const allPages = [{ name: 'damn' }];//routes.getAllPages();
+const allPages = routes.getAllPages();
+const exception = ['index', 'ranking'];
 
 allPages.forEach(page => {
-   Object.keys(types).forEach(type => {
-      let content = getContent(page.name, type);
+   if(exception.includes(page.name)){
 
-      createSaveFolder(page.name, type);
-      let savePath = getSavePath(page.name, type);
-
-      if(type === types.component){
-         if(!fs.existsSync(savePath)) fs.writeFileSync(savePath, content, 'utf8');
-      }else {
-         fs.writeFileSync(savePath, content, 'utf8');
-      }
-      
-   });
+   }else {
+      Object.keys(types).forEach(type => {
+         let content = getContent(page.name, type);
+   
+         createSaveFolder(page.name, type);
+         let savePath = getSavePath(page.name, type);
+   
+         if(type === types.component){
+            if(!fs.existsSync(savePath)) fs.writeFileSync(savePath, content, 'utf8');
+         }else {
+            fs.writeFileSync(savePath, content, 'utf8');
+         }
+         
+      });
+   }
+   
 })
-
-
-
-
-// fs.readFile(getTemplatePath(types.js), { encoding: 'utf-8' }, (err, data) => {
-//    if(err) {
-//      throw new Error(err);
-//    }else {
-//       createJS('damn', data);  
-//    }
-// });
-
-
-
-const createPage = (name) => {
-
-
-
-
-   createSaveFolder(name, types.html);
-
-   let savePath = getSavePath(name, types.html);
-   let content = template.replace('home', name.toLowerCase()).replace('Home', capitalize(name));
-   fs.writeFile(savePath, content, 'utf8', (err) => {
-      if(err) {
-         throw err;
-      }
-   });
-}
-
-const createJS = (name, template) => {
-   createSaveFolder(name, types.js);
-
-   let savePath = getSavePath(name, types.js);
-   let content = template.replace('home', name.toLowerCase()).replace('Home', capitalize(name));
-   fs.writeFile(savePath, content, 'utf8', (err) => {
-      if(err) {
-         throw err;
-      }
-   });
-}
-
-const createVue = (name, template) => {
-   createSaveFolder(name, types.vue);
-
-   let savePath = getSavePath(name, types.vue);
-   let content = template.replace('home', name.toLowerCase()).replace('Home', capitalize(name));
-   fs.writeFile(savePath, content, 'utf8', (err) => {
-      if(err) {
-         throw err;
-      }
-   });
-}
-

@@ -28,9 +28,9 @@ export default {
       };
    },
    computed: {
-      ...mapGetters(['initComplete']),
+      ...mapGetters(['initCompleted']),
       ready() {
-         return this.active && this.initComplete;
+         return this.active && this.initCompleted;
       }
    },
 	created() {

@@ -1,56 +1,51 @@
 <template>
-   <div v-show="!loading" id="app" class="page bdbg js_show">
-		<van-nav-bar :title="categoryTitle" fixed left-arrow @click-left="goBack" />
-		<Partners ref="partners" />
-   </div>
+	<div id="app" v-if="initCompleted">
+		<Partners />
+      <MFooter v-if="!isPlus" />
+	</div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
-import { GET_CATEGORY } from '@/store/actions.type';
-import { log } from '@/utils';
-import mui from 'mui';
-import { NavBar } from 'vant';
-Vue.use(NavBar);
 
-  
+import { mapState, mapGetters } from 'vuex';
+import { PAGE_EVENT } from '@/store/actions.type';
+
 import Partners from './components/Partners';
+import MFooter from '@/components/FootTab';
+
 export default {
 	name: 'App',
 	components: {
-		Partners
+      Partners,
+      MFooter
 	},
-	computed: {
-      ...mapState({
-			loading: state => state.app.loading,
-			category: state => state.categories.category
-		}),
-		categoryTitle() {
-			if(this.category) {
-				return this.category.title + ' 頃聽師';
-			}else {
-				return '頃聽師';
-			}
-		}
-	},
+	data() {
+      return {
+         name: 'partners'
+      };
+   },
+   computed: {
+      ...mapGetters(['initCompleted', 'isPlus'])
+   },
 	created() {
-		window.addEventListener('event_update', event => {
-			let detail = event.detail;
-			log(detail, 'event.detail');
-			this.$store.dispatch(GET_CATEGORY, detail.id)
-			.then(() => this.$refs.partners.update())
-		});
+      if(this.isPlus) {
+         window.addEventListener(PAGE_EVENT, this.pageEventHandler);
+      }else {
+         this.init();
+      }
    },
-	beforeMount() {
-      
-   },
-	methods: {
-		goBack() {
-			mui.back();
-		}
+   methods: {
+		pageEventHandler(e) {
+         console.log('app pageEventHandler', e);
+         Utils.pageEventHandler(this, e);
+      },
+      init(active = true) {
+         if(active) Utils.onPageCreated(this);
+      }
 	}
 };
 </script>
+
 
 <style lang="scss">
 @import "@/assets/scss/base.scss";

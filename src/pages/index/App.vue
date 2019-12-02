@@ -1,17 +1,16 @@
 <template>
-	<div id="app" v-if="ready">
-		
+	<div id="app" v-if="initCompleted">
 		<MFooter />
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { INDEX_EVENT, PLUS_READY, INIT_WEBVIEW,
-	GO_TO_PAGE 
+import { INDEX_EVENT, INIT_COMPLETED, 
+	GO_TO_PAGE, ACTIVE_WEBVIEW 
 } from '@/store/actions.type';
 
-import { isPlus } from '@/utils';
+
 import MFooter from '@/components/FootTab';
 
 export default {
@@ -21,43 +20,49 @@ export default {
 	},
 	data() {
 		return {
-			name: 'index',
-			isPlus: isPlus()			
+			
+			name: 'index'			
 		};
 	},
 	computed: {
-      ...mapGetters(['initComplete', 'plusReady']),
-      ready() {
-         if(this.isPlus) return this.plusReady;
-         return this.initComplete;
-      }
+      ...mapGetters(['initCompleted', 'isPlus'])
    },
 	created() {
 		if(this.isPlus) {
-			window.addEventListener(INDEX_EVENT, this.indexEventHandler);
-
-			Bus.$on(PLUS_READY, () => {
-				let homePage = { name: 'home' };
-				this.$store.dispatch(INIT_WEBVIEW, homePage.name);
-				
-				this.$store.dispatch(GO_TO_PAGE, homePage);
-
-				plus.navigator.closeSplashscreen();
-				// 关闭全屏
-				plus.navigator.setFullscreen(false);
-			});
+         window.addEventListener(INDEX_EVENT, this.indexEventHandler);
 		}
-
+		
 		Utils.onPageCreated(this);
+
+		Bus.$on(INIT_COMPLETED, () => {
+				
+			this.$store.dispatch(GO_TO_PAGE, { name: 'home'});
+
+			this.onInitCompleted();
+		});
+
+		
 	},
 	methods: {
 		indexEventHandler(e) {
+			console.log('indexEventHandler', e);
 			let name = e.detail.name;
-			this.$store.dispatch(name, e.detail.data);
+			let data = e.detail.data;
+			if(name === ACTIVE_WEBVIEW) {
+				this.onPageActive(data.page);
+				
+			}else this.$store.dispatch(name, data);
+			
 		},
-		goPage(e){
-			console.log('goPage in vue', e);
-			//e.detail
+		onPageActive(page) {
+			if(page.name === 'login') this.onInitCompleted();
+		},
+		onInitCompleted() {
+			if(this.isPlus) {
+				plus.navigator.closeSplashscreen();
+				// 关闭全屏
+				plus.navigator.setFullscreen(false);
+			}
 		}
 	}
 };

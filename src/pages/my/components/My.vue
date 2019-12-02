@@ -16,7 +16,9 @@
 
       <Spacer />
       <van-cell-group>
-         <Link name="logout" icon="undo-outline" text="登出"/>
+         <Link name="logout" icon="undo-outline" text="登出"
+            @selected="logout" 
+         />
          
       </van-cell-group>
 	</div>
@@ -24,7 +26,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { GO_TO_PAGE } from '@/store/actions.type';
+import { OPEN_CHILD_PAGE, LOGOUT, GO_TO_PAGE } from '@/store/actions.type';
 
 import { Panel, Icon, Button, Cell, Grid, GridItem, CellGroup, Divider } from 'vant';
 Vue.use(Panel).use(Icon).use(Button).use(Cell).use(Grid)
@@ -47,7 +49,7 @@ export default {
    },
    data() {
       return {
-         hide: ['profile'],
+         hideLinks: ['profile'],
          model: {
             name: 'Stephen 阿水',
             type: '正式會員',
@@ -57,32 +59,26 @@ export default {
       };
    },
    computed: {
-      ...mapGetters(['currentUser','subPages']),
+      ...mapGetters(['currentUser','childrenLinks']),
       links() {
-         if(this.subPages) {
-            return this.subPages.filter(item => !this.hide.includes(item.name));
+         if(this.childrenLinks) {
+            return this.childrenLinks.filter(item => !this.hideLinks.includes(item.name));
          }else return [];
       }
    },
-   created() {
-
-   },
-   mounted() {
-      this.$nextTick(() => {
-         this.init();
-      });
-   },
    methods: {
-      init() {
-         
-      },
       onLinkSelected(name) {
          let page = this.links.find(item => item.name === name);
-         this.$store.dispatch(GO_TO_PAGE,  page);
+         this.$store.dispatch(OPEN_CHILD_PAGE,  page);
       },
       editProfile() {
-         console.log('editProfile');
-         this.$store.dispatch(GO_TO_PAGE,  { name: 'profile' });
+         this.$store.dispatch(OPEN_CHILD_PAGE,  { name: 'profile' });
+      },
+      logout() {
+         this.$store.dispatch(LOGOUT);
+         setTimeout(() => {
+            this.$store.dispatch(GO_TO_PAGE,  { name: 'home' });
+         }, 500)
       }
       
    }

@@ -1,6 +1,6 @@
 <template>
 	<div class="page-content nav-content">
-		<van-nav-bar :title="currentPage.meta.title" fixed left-arrow @click-left="goBack" />
+		<van-nav-bar :title="page.meta.title" fixed left-arrow @click-left="goBack" />
       <div>
          <h2 class="block-title">基本資料</h2>
          <van-cell-group>
@@ -40,6 +40,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import { GO_BACK } from '@/store/actions.type';
 import { NavBar, Cell, CellGroup, Field, Image, Button } from 'vant';
 import { NAME_COLORS } from '@/config';
 
@@ -66,7 +67,7 @@ export default {
       };
    },
    computed: {
-      ...mapGetters(['currentPage'])
+      ...mapGetters(['page'])
    },
    created() {
 
@@ -84,7 +85,7 @@ export default {
          
       },
       goBack() {
-			this.$emit('back');
+			this.$store.dispatch(GO_BACK);
       },
       onColorSelected(item) {
          this.selectedColor = { ...item };

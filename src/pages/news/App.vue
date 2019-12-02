@@ -1,14 +1,14 @@
 <template>
-   <div id="app" v-if="ready">
-      <News />
+	<div id="app" v-if="initCompleted">
+		<News />
       <MFooter v-if="!isPlus" />
-   </div>
+	</div>
 </template>
 
 <script>
+
 import { mapState, mapGetters } from 'vuex';
-import { PAGE_EVENT, ACTIVE_WEBVIEW } from '@/store/actions.type';
-import { isPlus } from '@/utils';
+import { PAGE_EVENT } from '@/store/actions.type';
 
 import News from './components/News';
 import MFooter from '@/components/FootTab';
@@ -16,21 +16,16 @@ import MFooter from '@/components/FootTab';
 export default {
 	name: 'App',
 	components: {
-		News,
-		MFooter
+      News,
+      MFooter
 	},
 	data() {
       return {
-         name: 'news',
-         isPlus: isPlus(),
-         active: false
+         name: 'news'
       };
    },
    computed: {
-      ...mapGetters(['initComplete']),
-      ready() {
-         return this.active && this.initComplete;
-      }
+      ...mapGetters(['initCompleted', 'isPlus'])
    },
 	created() {
       if(this.isPlus) {
@@ -40,17 +35,17 @@ export default {
       }
    },
    methods: {
-      pageEventHandler(e) {
+		pageEventHandler(e) {
+         console.log('app pageEventHandler', e);
          Utils.pageEventHandler(this, e);
       },
-      init() {
-         this.active = true;
-         Utils.onPageCreated(this);
-      } 
-   }
-   
+      init(active = true) {
+         if(active) Utils.onPageCreated(this);
+      }
+	}
 };
 </script>
+
 
 <style lang="scss">
 @import "@/assets/scss/base.scss";

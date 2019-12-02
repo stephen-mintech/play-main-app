@@ -8,8 +8,21 @@
   padding-bottom: 49px;
 }
 
+.page-container {
+  position : absolute;
+  top : 0;
+  right : 0;
+  bottom : 0;
+  left : 0;
+}
+
 .bdbg {
   background-color: $main-bg-color
+}
+
+
+.bg-color-main {
+  background-color: $color-main
 }
 
 .hdbg {
@@ -172,6 +185,12 @@
 }
 .text-dim {
   color: #c72c14 !important;
+}
+.text-error {
+  color: #c72c14 !important;
+}
+.text-link {
+  color: #1989fa !important;
 }
 .text-white {
   color: #fff !important;

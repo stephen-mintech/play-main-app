@@ -1,131 +1,52 @@
 <template>
-  <div id="app">
-    <header class="mui-bar mui-bar-nav">
-		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-		    <h1 class="mui-title">左右滑动分页</h1>
-		</header>
-    <div class="mui-content">
-      <div class="mui-slider">
-        <div class="mui-slider-group mui-slider-loop">
-          <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一个图文表格) -->
-          <div class="mui-slider-item mui-slider-item-duplicate">
-            <ul class="mui-table-view mui-grid-view">
-              <li class="mui-table-view-cell mui-media mui-col-xs-6">
-                <a href="#">
-                  <img class="mui-media-object" :src="`static/images/avatars/1.jpg`" />
-                  <div class="mui-media-body">Color of SIP CBD</div>
-                </a>
-              </li>
-              <li class="mui-table-view-cell mui-media mui-col-xs-6">
-                <a href="#">
-                  <img class="mui-media-object" :src="`static/images/avatars/1.jpg`" />
-                  <div class="mui-media-body">静静看这世界</div>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="mui-slider-item">
-            <ul class="mui-table-view mui-grid-view">
-              <li class="mui-table-view-cell mui-media mui-col-xs-6">
-                <a href="#">
-                  <img class="mui-media-object" :src="`static/images/avatars/1.jpg`" />
-                  <div class="mui-media-body">幸福就是可以一起睡觉</div>
-                </a>
-              </li>
-              <li class="mui-table-view-cell mui-media mui-col-xs-6">
-                <a href="#">
-                  <img class="mui-media-object" :src="`static/images/avatars/1.jpg`" />
-                  <div class="mui-media-body">想要一间这样的木屋，静静的喝咖啡</div>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="mui-slider-item">
-            <ul class="mui-table-view mui-grid-view">
-              <li class="mui-table-view-cell mui-media mui-col-xs-6">
-                <a href="#">
-                  <img class="mui-media-object" :src="`static/images/avatars/1.jpg`" />
-                  <div class="mui-media-body">Color of SIP CBD</div>
-                </a>
-              </li>
-              <li class="mui-table-view-cell mui-media mui-col-xs-6">
-                <a href="#">
-                  <img class="mui-media-object" :src="`static/images/avatars/1.jpg`" />
-                  <div class="mui-media-body">静静看这世界</div>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一个图文表格) -->
-          <div class="mui-slider-item mui-slider-item-duplicate">
-            <ul class="mui-table-view mui-grid-view">
-              <li class="mui-table-view-cell mui-media mui-col-xs-6">
-                <a href="#">
-                  <img class="mui-media-object" :src="`static/images/avatars/1.jpg`" />
-                  <div class="mui-media-body">幸福就是可以一起睡觉</div>
-                </a>
-              </li>
-              <li class="mui-table-view-cell mui-media mui-col-xs-6">
-                <a href="#">
-                  <img class="mui-media-object" :src="`static/images/avatars/1.jpg`" />
-                  <div class="mui-media-body">想要一间这样的木屋，静静的喝咖啡</div>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="mui-slider-indicator" style="position: static;background-color: #fff;">
-          <span class="mui-action mui-action-previous mui-icon mui-icon-back"></span>
-          <div class="mui-number">
-            <span>1</span> / 2
-          </div>
-          <span class="mui-action mui-action-next mui-icon mui-icon-forward"></span>
-        </div>
-      </div>
-    </div>
-    <!-- <Demo />
-    <MFooter v-show="showFooter" />-->
-  </div>
+	<div id="app" v-if="initCompleted">
+		<Demo />
+      <MFooter v-if="!isPlus" />
+	</div>
 </template>
 
 <script>
-import PageManager from "page-manager";
-import MFooter from "@/components/FootTab";
-import Demo from "./components/Demo";
+
+import { mapState, mapGetters } from 'vuex';
+import { PAGE_EVENT } from '@/store/actions.type';
+
+import Demo from './components/Demo';
+import MFooter from '@/components/FootTab';
 
 export default {
-  name: "App",
-  components: {
-    MFooter,
-    Demo
-  },
-  data() {
-    return {
-      showFooter: false
-    };
-  },
-  created() {
-	 this.showFooter = !PageManager.isPlus;
-	 mui.init();
-  },
-  mounted() {},
-  methods: {}
+	name: 'App',
+	components: {
+      Demo,
+      MFooter
+	},
+	data() {
+      return {
+         name: 'demo'
+      };
+   },
+   computed: {
+      ...mapGetters(['initCompleted', 'isPlus'])
+   },
+	created() {
+      if(this.isPlus) {
+         window.addEventListener(PAGE_EVENT, this.pageEventHandler);
+      }else {
+         this.init();
+      }
+   },
+   methods: {
+		pageEventHandler(e) {
+         console.log('app pageEventHandler', e);
+         Utils.pageEventHandler(this, e);
+      },
+      init(active = true) {
+         if(active) Utils.onPageCreated(this);
+      }
+	}
 };
 </script>
 
-<style lang="scss" >
-@import "@/assets/scss/var";
-@import "@/assets/scss/common";
-@import "@/assets/scss/base.scss";
-html,
-body {
-  background: #dddddd;
-  height: 100%;
-}
 
-#app,
-.page-content {
-  background: #dddddd;
-  min-height: 100%;
-}
+<style lang="scss">
+@import "@/assets/scss/base.scss";
 </style>

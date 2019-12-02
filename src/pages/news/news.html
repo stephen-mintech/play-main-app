@@ -8,21 +8,13 @@
 	<meta name="misapplication-tap-highlight" content="no" />
 </head>
 
-<body>
+<body> 
+	
 	<div id="app"></div>
+	
 	<!-- built files will be auto injected -->
 	<script src="static/js/mui.min.js"></script>
-	<script>
-		function pageEvent(pageName, name, data){
-			var payload = {
-				pageName: pageName,
-				name: name,
-				data: data
-			};
-			var event = new CustomEvent('pageEvent', { 'detail': payload });
-			window.dispatchEvent(event);
-		}
-	</script>
+	
 </body>
 
 </html>

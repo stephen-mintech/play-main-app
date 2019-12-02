@@ -1,42 +1,124 @@
-import { CHECK_AUTH, INIT, ACTIVE_WEBVIEW, UN_ACTIVE_WEBVIEW } from '@/store/actions.type';
+import { IS_PLUS } from '@/config';
+import Jwt from '@/common/jwt';
+import { PLUS_READY, CHECK_AUTH, INIT, GO_TO_PAGE, REFRESH_TOKEN,
+   ACTIVE_WEBVIEW, UN_ACTIVE_WEBVIEW 
+} from '@/store/actions.type';
+import { FOR_ALL, GUEST_ONLY, USER_ONLY, ADMIN_ONLY } from '@/routes/route.type';
+import { APP_NAME, APP_UI } from '@/config';
+
+const config = {
+   statusbar: APP_UI.statusbarColor,
+};
+
+const setStatusBarBg = (color, style) => {
+   // 设置系统状态栏背景
+   plus.navigator.setStatusBarBackground(color || config.statusbar);
+   //plus.navigator.setStatusBarStyle(style || 'light');
+}
 
 export const onPageCreated = (vm) => {
+   
+   if(IS_PLUS){
+      if(!Utils.isPlus())  throw new Error('Plus Not Found');
+   }
 
    let page = Routes.findPage(vm.name);
    if(!page) Utils.pageNotFound(vm.name);
 
-   vm.$store.dispatch(CHECK_AUTH, page)
-   .then(result => {
-      console.log('result', result);
-      if(result.auth) {
-         vm.$store.dispatch(INIT, { user: result.user, page });
+   if(IS_PLUS) {
+      if(vm.$store.getters.plusReady){
+         checkAuthHandler(vm, page);
+      }else {
+         mui.plusReady(() => {
+            vm.$store.dispatch(PLUS_READY);
+   
+            checkAuthHandler(vm, page);
+            
+         });
       }
-      else throw new Error('權限不足');
-   })
-   .catch(error => {
+   }else {
+      checkAuthHandler(vm, page);
+   }
+
+   
+}
+
+const checkAuthHandler = (vm, page) => {
+   
+   vm.$store.dispatch(CHECK_AUTH)
+   .then(user => {
+      let pageType = Routes.getRouteType(page);
+      let needAuth = pageType === USER_ONLY;
+		let guestOnly = pageType === GUEST_ONLY;
+      let forAll = pageType === FOR_ALL;
+
+      if(user) {
+         //有token
+			let tokenStatus = Jwt.tokenStatus();
+			if(tokenStatus === -1) {
+				//token過期
+				if(forAll) next(vm, page);
+				else refreshToken(vm, page);
+
+			}else if(tokenStatus === 0) {
+				//token 即將到期
+				if(forAll) next(vm, page);
+				else if(guestOnly) redirect(vm, { name: 'home' });
+				else refreshToken(vm, page);
+
+			}else {
+				//token正常
+				if(guestOnly) redirect(vm, { name: 'home' });
+				else next(vm, page);
+			} 	
+			
+		}else{
+         //沒有token
+			if(needAuth){
+            //需要驗證, 導入login
+            redirect(vm, { name: 'login' }, { returnPage: page});
+			}
+			else{
+				next(vm, page);
+			} 
+		}
+   });
+}
+
+const next = (vm, page) => {
+   //初始化頁面, 進入此階段表示user已通過驗証
+   vm.$store.dispatch(INIT, page);
+}
+
+const redirect = (vm, page, params = {}) => {
+   vm.$store.dispatch(GO_TO_PAGE, page, params);
+}
+
+const refreshToken = (vm, page) => {
+   vm.$store
+   .dispatch(REFRESH_TOKEN)
+   .then(() => {
+      next(vm, page);
+   }).catch(error => {
       console.log(error);
+      redirect(vm, { name: 'login' }, { returnPage: page});
    })
+
 }
 
 
+
+
 export const pageEventHandler = (vm, e) => {
-   console.log('pageEventHandler');
-   console.log('pageName', e.detail.pageName);
-   console.log('vm.name', vm.name);
-
-   console.log('name', e.detail.name);
-
-   let pageName = e.detail.pageName;
-   // 只處理發佈給此頁面的事件
-   if(pageName !== vm.name) return;
-
 
    let name = e.detail.name;
    if(name === ACTIVE_WEBVIEW) {
-      vm.init();
+      vm.init(true);
    }else if(name === UN_ACTIVE_WEBVIEW) {
-      vm.active = false;
+      vm.init(false);
    } 
-   else vm.$store.dispatch(name, e.detail.data);
+   else {
+      console.log('unhadled event');
+   }
 
 }

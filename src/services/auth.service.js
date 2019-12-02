@@ -1,8 +1,11 @@
 import BaseService from '@/common/baseService';
-import { SITE_URL } from '@/config';
+import { API_URL } from '@/config';
 
-const source =`${SITE_URL}/api/auth`;
+const source =`${API_URL}/auth`;
+
+const login = (credentials) => BaseService.post(`${source}/login`, credentials);
+
 
 const refreshToken = (credentials) => BaseService.post(`${source}/RefreshToken`, credentials);
 
-export default { refreshToken };
+export default { refreshToken, login };

@@ -30,7 +30,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(['currentUser', 'currentPage']),
+		...mapGetters(['currentUser']),
 		...mapState({
 			tabPages: state => state.app.tabPages,
 			activeTab: state => state.app.activeTab

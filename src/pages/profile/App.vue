@@ -1,6 +1,6 @@
 <template>
-	<div id="app" v-if="ready">
-		<Profile @back="goBack" />
+	<div id="app" v-if="initCompleted">
+		<Profile />
       <MFooter v-if="!isPlus" />
 	</div>
 </template>
@@ -8,8 +8,7 @@
 <script>
 
 import { mapState, mapGetters } from 'vuex';
-import { PAGE_EVENT, ACTIVE_WEBVIEW, GO_BACK } from '@/store/actions.type';
-import { isPlus } from '@/utils';
+import { PAGE_EVENT } from '@/store/actions.type';
 
 import Profile from './components/Profile';
 import MFooter from '@/components/FootTab';
@@ -22,16 +21,11 @@ export default {
 	},
 	data() {
       return {
-         name: 'profile',
-         isPlus: isPlus(),
-         active: false
+         name: 'profile'
       };
    },
    computed: {
-      ...mapGetters(['initComplete']),
-      ready() {
-         return this.active && this.initComplete;
-      }
+      ...mapGetters(['initCompleted', 'isPlus'])
    },
 	created() {
       if(this.isPlus) {
@@ -42,14 +36,11 @@ export default {
    },
    methods: {
 		pageEventHandler(e) {
+         console.log('app pageEventHandler', e);
          Utils.pageEventHandler(this, e);
       },
-      init() {
-         this.active = true;
-         Utils.onPageCreated(this);
-      },
-      goBack() {
-         this.$store.dispatch(GO_BACK);
+      init(active = true) {
+         if(active) Utils.onPageCreated(this);
       }
 	}
 };

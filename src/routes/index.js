@@ -2,120 +2,7 @@ import { FOR_ALL, GUEST_ONLY, USER_ONLY, ADMIN_ONLY } from './route.type';
 const DEFAULT_PAGE_NAME = 'home';
 
 var applinks = [
-   {
-      name: 'index',
-      view: 'index.html',
-      parents: [],
-      meta: {
-         order: 0
-      } 
-   },
-	{
-      name: 'home',
-      view: 'home.html',
-      parents: ['index'],
-      meta: {
-         order: 0,
-         icon: 'home-outline',
-         title: '首頁',
-			tab: true
-      } 
-   },
-   {
-      name: 'news',
-      view: 'news.html',
-      parents: ['index'],
-      meta: {
-         order: 0,
-         icon: 'game-controller-a-outline',
-         title: '動態',
-			tab: true
-      } 
-   },
-   {
-      name: 'ranking',
-      view: 'ranking.html',
-      parents: ['index'],
-      meta: {
-         order: 0,
-         icon: 'heart',
-         title: '排行',
-			tab: true
-      } 
-   },
-   {
-      name: 'notices',
-      view: 'notices.html',
-      parents: ['index'],
-      meta: {
-         order: 0,
-         icon: 'email-outline',
-         title: '消息',
-			tab: true
-      } 
-   },
-   {
-      name: 'bulletin',
-      view: 'bulletin.html',
-      parents: ['notices'],
-      meta: {
-         order: 0,
-         icon: 'bell-outline',
-         title: '官方公告',
-			tab: false
-      } 
-   },
-   {
-      name: 'partners',
-      view: 'partners.html',
-      parents: [''],
-      meta: {
-         order: 0,
-         title: '傾聽師',
-			tab: false
-      } 
-   },
-   {
-      name: 'article',
-      view: 'article.html',
-      parents: ['news'],
-      meta: {
-         order: 0,
-			tab: false
-      } 
-   },
-   {
-      name: 'chat',
-      view: 'chat.html',
-      parents: [],
-      meta: {
-         order: 0,
-         title: '交談',
-			tab: false
-      } 
-   },
-   {
-      name: 'categories',
-      view: 'categories.html',
-      parents: [],
-      meta: {
-         order: 0,
-         icon: 'search',
-         title: '全部分類',
-         tab: false
-      } 
-	},
-	{
-      name: 'demo',
-      view: 'demo.html',
-      parents: ['home'],
-      meta: {
-         order: 0,
-         icon: 'search',
-         title: 'Demo',
-         tab: false
-      } 
-	},
+   
 	
 ];
 
@@ -126,7 +13,7 @@ var adminlinks = [
       name: 'Dashboard',
       path: '/dashboard',
       view: 'Dashboard',
-      parents: [],
+      parent: [],
       meta: {
          order: 0,
          icon: 'mdi-view-dashboard',
@@ -142,12 +29,12 @@ var guestLinks = [
    {
       name: 'login',
       view: 'login.html',
-      parents: [],
+      parent: '',
       meta: {
          order: 0,
-         icon: 'manager-o',
+         icon: 'person-outline',
          title: '登入',
-         tab: true
+         tab: false
       } 
    }
 ];
@@ -156,9 +43,62 @@ guestLinks.forEach(item => item.meta.type = GUEST_ONLY);
 
 var userLinks = [
    {
+      name: 'index',
+      view: 'index.html',
+      parent: '',
+      meta: {
+         order: 0
+      } 
+   },
+	{
+      name: 'home',
+      view: 'home.html',
+      parent: '',
+      meta: {
+         order: 0,
+         icon: 'home-outline',
+         title: '首頁',
+			tab: true
+      } 
+   },
+   {
+      name: 'news',
+      view: 'news.html',
+      parent: '',
+      meta: {
+         order: 0,
+         icon: 'game-controller-a-outline',
+         title: '動態',
+			tab: true
+      } 
+   },
+   {
+      name: 'ranking',
+      view: 'ranking.html',
+      parent: '',
+      meta: {
+         order: 0,
+         icon: 'heart',
+         title: '排行',
+			tab: true
+      } 
+   },
+   {
+      name: 'notices',
+      view: 'notices.html',
+      parent: '',
+      meta: {
+         order: 0,
+         icon: 'email-outline',
+         title: '消息',
+			tab: true
+      } 
+   },
+   {
       name: 'my',
       view: 'my.html',
-      parents: ['index'],
+      parent: '',
+      subpages: ['profile'],
       meta: {
          order: 0,
          icon: 'person-outline',
@@ -167,9 +107,82 @@ var userLinks = [
       } 
    },
    {
+      name: 'bulletin',
+      view: 'bulletin.html',
+      parent: 'notices',
+      meta: {
+         order: 0,
+         icon: 'bell-outline',
+         title: '官方公告',
+			tab: false
+      } 
+   },
+   {
+      name: 'partners',
+      view: 'partners.html',
+      parent: '',
+      meta: {
+         order: 0,
+         title: '傾聽師',
+			tab: false
+      } 
+   },
+   {
+      name: 'article',
+      view: 'article.html',
+      parent: 'news',
+      meta: {
+         order: 0,
+			tab: false
+      } 
+   },
+   {
+      name: 'chat',
+      view: 'chat.html',
+      parent: '',
+      meta: {
+         order: 0,
+         title: '交談',
+			tab: false
+      } 
+   },
+   {
+      name: 'categories',
+      view: 'categories.html',
+      parent: '',
+      meta: {
+         order: 0,
+         icon: 'search',
+         title: '全部分類',
+         tab: false
+      } 
+	},
+	{
+      name: 'demo',
+      view: 'demo.html',
+      parent: 'home',
+      meta: {
+         order: 0,
+         icon: 'search',
+         title: 'Demo',
+         tab: false
+      } 
+   },
+   {
+      name: 'auth',
+      view: 'auth.html',
+      parent: '',
+      meta: {
+         order: 0,
+         title: 'Auth',
+         tab: false
+      } 
+	},
+   
+   {
       name: 'profile',
       view: 'profile.html',
-      parents: ['my'],
+      parent: 'my',
       meta: {
          order: 0,
          icon: '',
@@ -179,8 +192,8 @@ var userLinks = [
    },
 	{
       name: 'contact-us',
-      view: '',
-      parents: ['my'],
+      view: 'contact-us.html',
+      parent: 'my',
       meta: {
          order: 0,
          icon: 'briefcase-outline',
@@ -191,7 +204,7 @@ var userLinks = [
    {
       name: 'join-partner',
       view: 'join-partner.html',
-      parents: ['my'],
+      parent: 'my',
       meta: {
          order: 0,
          icon: 'game-controller-b-outline',
@@ -201,8 +214,8 @@ var userLinks = [
    },
    {
       name: 'orders',
-      view: '',
-      parents: ['my', 'notices'],
+      view: 'orders.html',
+      parent: 'my',
       meta: {
          order: 0,
          icon: 'list-outline',
@@ -212,8 +225,8 @@ var userLinks = [
    },
    {
       name: 'wallet',
-      view: '',
-      parents: ['my'],
+      view: 'wallet.html',
+      parent: 'my',
       meta: {
          order: 0,
          icon: 'briefcase-outline',
@@ -223,8 +236,8 @@ var userLinks = [
    },
    {
       name: 'album',
-      view: '',
-      parents: ['my'],
+      view: 'album.html',
+      parent: 'my',
       meta: {
          order: 0,
          icon: 'bookmarks-outline',
@@ -235,7 +248,7 @@ var userLinks = [
    {
       name: 'bank-account',
       view: 'bank-account.html',
-      parents: ['my'],
+      parent: 'my',
       meta: {
          order: 0,
          icon: 'calculator-outline',
@@ -245,8 +258,8 @@ var userLinks = [
    },
    {
       name: 'tutorial',
-      view: '',
-      parents: ['my'],
+      view: 'tutorial.html',
+      parent: 'my',
       meta: {
          order: 0,
          icon: 'book-outline',
@@ -257,7 +270,7 @@ var userLinks = [
    {
       name: 'settings',
       view: 'settings.html',
-      parents: ['my'],
+      parent: 'my',
       meta: {
          order: 0,
          icon: 'gear-outline',
@@ -297,7 +310,7 @@ const getDefaultPage = (user = null) => {
 }
 const getRootPages = (user = null) => {
 	let links = getLinks(user);
-	return links.filter(item => item.parents.includes('index'));
+	return links.filter(item => item.parent.includes('index'));
 }
 const getMenuPages = (user = null) => {
 	let links = getLinks(user);
@@ -305,13 +318,27 @@ const getMenuPages = (user = null) => {
 }
 
 const getTabPages = (user = null) => {
+   
 	let links = getLinks(user);
-	return links.filter(item => item.meta && item.meta.tab);
+	return links.filter(item => isTabPage(item));
 }
 
-const getSubPages = (parent, user = null) => {
+const isTabPage = (page) => {
+   if(page.meta && page.meta.tab) return page.meta.tab;
+   else return false;
+}
+
+const getRouteType = (page) => page.meta.type;
+
+const getSubPages = (parentPage, user = null) => {
+   if(!parentPage.subpages) return [];
 	let links = getLinks(user);
-	return links.filter(item => item.parents && item.parents.includes(parent));
+	return links.filter(item => parentPage.subpages.includes(item.name));
+}
+
+const getChildrenLinks = (parentPage, user = null) => {
+   let links = getLinks(user);
+	return links.filter(item => item.parent && item.parent === parentPage.name);
 }
 
 
@@ -326,8 +353,11 @@ export default {
    findPage,
    getDefaultPage,
    getRootPages,
+   getChildrenLinks,
    getSubPages,
    getTabPages,
+   isTabPage,
    findPageByPath,
-   getMenuPages
+   getMenuPages,
+   getRouteType
 }

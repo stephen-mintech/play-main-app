@@ -18,14 +18,16 @@
 </template>
 
 <script>
+
 import { Button, Tag } from 'vant';
 Vue.use(Button).use(Tag);
 
 export default {
+   name: 'BackAccountItem',
    props: {
       model: Object
    },
-   name: 'BackAccountItem'
+   
 }
 </script>
 

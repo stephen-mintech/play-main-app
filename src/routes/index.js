@@ -2,7 +2,27 @@ import { FOR_ALL, GUEST_ONLY, USER_ONLY, ADMIN_ONLY } from './route.type';
 const DEFAULT_PAGE_NAME = 'home';
 
 var applinks = [
-   
+   {
+      name: 'album',
+      view: 'album.html',
+      parent: 'my',
+      meta: {
+         order: 0,
+         icon: 'bookmarks-outline',
+         title: '我的相簿',
+			tab: false
+      } 
+   },
+   {
+      name: 'skill',
+      view: 'skill.html',
+      parent: '',
+      meta: {
+         order: 0,
+         title: '',
+			tab: false
+      } 
+   },
 	
 ];
 
@@ -20,7 +40,8 @@ var adminlinks = [
          title: 'Dashboard',
 			tab: true
       } 
-   }   
+   },
+     
 ];
 
 adminlinks.forEach(item => item.meta.type = ADMIN_ONLY);
@@ -190,6 +211,27 @@ var userLinks = [
 			tab: false
       } 
    },
+   {
+      name: 'bind-phone',
+      view: 'bind-phone.html',
+      parent: 'my',
+      meta: {
+         order: 0,
+         title: '手機號碼綁定',
+			tab: false
+      } 
+   },
+   {
+      name: 'bank-account',
+      view: 'bank-account.html',
+      parent: 'my',
+      meta: {
+         order: 0,
+         icon: 'calculator-outline',
+         title: '銀行帳戶',
+			tab: false
+      } 
+   },
 	{
       name: 'contact-us',
       view: 'contact-us.html',
@@ -234,28 +276,8 @@ var userLinks = [
 			tab: false
       } 
    },
-   {
-      name: 'album',
-      view: 'album.html',
-      parent: 'my',
-      meta: {
-         order: 0,
-         icon: 'bookmarks-outline',
-         title: '我的相簿',
-			tab: false
-      } 
-   },
-   {
-      name: 'bank-account',
-      view: 'bank-account.html',
-      parent: 'my',
-      meta: {
-         order: 0,
-         icon: 'calculator-outline',
-         title: '銀行帳戶',
-			tab: false
-      } 
-   },
+   
+   
    {
       name: 'tutorial',
       view: 'tutorial.html',
@@ -278,6 +300,7 @@ var userLinks = [
 			tab: false
       } 
    },
+   
 ];
 
 userLinks.forEach(item => item.meta.type = USER_ONLY);

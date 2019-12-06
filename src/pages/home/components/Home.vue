@@ -16,8 +16,8 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { FETCH_PARTNERS, GET_CATEGORY, OPEN_CHILD_PAGE } from '@/store/actions.type';
-import PageManager from 'page-manager';
+import { FETCH_PARTNERS, GET_CATEGORY, OPEN_CHILD_PAGE, BBIM_ACTION, CLOSE_SOCKET } from '@/store/actions.type';
+
 
 import Loading from '@/components/Loading';
 import HomeMenu from '@/components/home/Menu';
@@ -43,7 +43,7 @@ export default {
       ...mapState({
          partnersList: state => state.partners.list
       }),
-      ...mapGetters(['isPlus', 'homeMenuItems', 'loading', 'subPages']),
+      ...mapGetters(['page', 'isPlus', 'homeMenuItems', 'loading', 'subPages']),
       newsRefreshElementId() {
          return getElementId(this.newsRefreshId);
       }
@@ -69,12 +69,20 @@ export default {
       // });
    },
    mounted() {
+      console.log('mounted');
       this.$nextTick(() => {
          this.init();
       });
    },
    methods: {
       init() {
+         
+         // this.$store.dispatch(BBIM_ACTION, this.page, 'getBankInfo', '', (res) => {
+         //    console.log('res', res);
+         // });
+
+         //this.$store.dispatch(BBIM_ACTION, this.page, 'getBankInfo', '', null);
+
          this.fetchData();
       },
       fetchData() {
@@ -101,8 +109,8 @@ export default {
          this.onCategorySelected(item);         
       },
       onCategorySelected(category) {
-         
-         this.$store.dispatch(OPEN_CHILD_PAGE, { name: 'demo' }, { id: 3});
+         this.$store.dispatch(CLOSE_SOCKET);//for test
+         //this.$store.dispatch(OPEN_CHILD_PAGE, { name: 'demo' }, { id: 3});
       }
    }
 };

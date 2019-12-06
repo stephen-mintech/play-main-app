@@ -28,7 +28,6 @@ export default {
       ...mapGetters(['initCompleted', 'isPlus'])
    },
 	created() {
-      console.log('created');
       if(this.isPlus) {
          window.addEventListener(PAGE_EVENT, this.pageEventHandler);
       }else {
@@ -37,7 +36,6 @@ export default {
    },
    methods: {
 		pageEventHandler(e) {
-         console.log('app pageEventHandler', e);
          Utils.pageEventHandler(this, e);
       },
       init(active = true) {

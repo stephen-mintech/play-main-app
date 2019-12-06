@@ -75,14 +75,7 @@ export default {
       }),
    },
    created() {
-      // 订阅更新事件
-      window.addEventListener('event_update', event => {
-         // 获得事件参数
-			let detail = event.detail;
-			// 触发子组件更新
-			Utils.log(detail, 'event_update with detail');
-         this.update();
-      })
+      
    },
    mounted() {
       this.$nextTick(() => {

@@ -1,6 +1,6 @@
 <template>
    <div class="page-content nav-content">
-      <van-nav-bar :title="currentPage.meta.title" fixed left-arrow @click-left="goBack" />
+      <van-nav-bar :title="page.meta.title" fixed left-arrow @click-left="goBack" />
       <div>
          <h2 class="block-title">必須綁定手機與銀行帳戶</h2>
          <van-cell-group>
@@ -33,7 +33,7 @@ export default {
       };
    },
    computed: {
-      ...mapGetters(['currentPage'])
+      ...mapGetters(['page'])
    },
    methods: {
       init() {

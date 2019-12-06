@@ -17,9 +17,20 @@ export const PLUS_SELECT_TAB = 'plusSelectTab';
 export const PLUS_TO_PAGE = 'plusToPage';
 export const PLUS_OPEN_CHILD_PAGE = 'plusOpenChildPage';
 export const PLUS_GO_BACK = 'plusGoBack';
+export const SHOW_INDEX = 'showIndex';
+
+//socket.module
+export const SOCKET_CONNECTING = 'socketConnecting';
+export const SOCKET_CONNECTED = 'socketConnected';
+export const INIT_SOCKET = 'initSocket';
+export const SOCKET_SEND = 'socketSend';
+export const CLOSE_SOCKET = 'closeSocket';
+export const BBIM_ACTION = 'bbimAction';
+export const BBIM_MESSAGE = 'bbimMessage';
 
 //auth.module
 export const CHECK_AUTH = 'checkAuth';
+export const OAUTH_LOGIN = 'oauthLogin';
 export const LOGIN = 'login';
 export const LOGOUT = 'logout';
 export const REFRESH_TOKEN = 'refreshToken';
@@ -30,10 +41,23 @@ export const GO_BACK = 'goBack';
 export const TO_BIND_PHONE_PAGE = 'toBindPhonePage';
 export const OPEN_CHILD_PAGE = 'openChildPage';
 
+//bbim
+export const GET_BANK_INFO = 'getBankInfo';
 
+//news.module
+export const FETCH_NEWS = 'fetchNews';
+export const GET_NEWS = 'getNews';
 
+//notices.module
+export const FETCH_NOTICES = 'fetchNotices';
+export const GET_NOTICE = 'getNotice';
 
-export const FETCH_MY_LINKS = 'fetchMyLinks';
+//phone.module
+export const FETCH_AREA = 'fetchArea';
+
+//bank.module
+export const FETCH_BANK_INFOES = 'fetchBankInfoes';
+export const BANK_INFOES_FETCHED = 'bankInfoesFetched';
 
 export const FETCH_CATEGORIES = 'fetchCategories';
 export const GET_CATEGORY = 'getCategory';
@@ -41,5 +65,3 @@ export const GET_CATEGORY = 'getCategory';
 export const FETCH_PARTNERS = 'fetchPartners';
 export const GET_PARTNER = 'getPartners';
 
-export const FETCH_NEWS = 'fetchNews';
-export const GET_NEWS = 'getNews';

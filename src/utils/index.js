@@ -2,6 +2,22 @@ import Qs from 'qs';
 
 export const isPlus = () => navigator.userAgent.indexOf('Html5Plus') >= 0;
 
+export const resolveOkData = (data) => {
+   return {
+      status: data.result_status,
+      msg: data.result_message,
+      content: data.result_content
+   };
+}
+
+export const resolveSocketData = (data) => {
+   console.log('in', data);
+   return {
+      to: data.SendTo,
+      key: data.key,
+      result: resolveOkData(data.param)
+   };
+}
 
 export const resolveErrorData = (error) => {
    console.error(error);
@@ -36,3 +52,4 @@ export const getQuery = str => {
 
 export * from './helper';
 export * from './global';
+export * from './plus';

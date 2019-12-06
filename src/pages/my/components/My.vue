@@ -62,14 +62,14 @@ export default {
       ...mapGetters(['currentUser','childrenLinks']),
       links() {
          if(this.childrenLinks) {
-            return this.childrenLinks.filter(item => !this.hideLinks.includes(item.name));
+            return this.childrenLinks.filter(item => item.meta.icon);
          }else return [];
       }
    },
    methods: {
       onLinkSelected(name) {
          let page = this.links.find(item => item.name === name);
-         this.$store.dispatch(OPEN_CHILD_PAGE,  page);
+         this.$store.dispatch(GO_TO_PAGE, page);
       },
       editProfile() {
          this.$store.dispatch(OPEN_CHILD_PAGE,  { name: 'profile' });

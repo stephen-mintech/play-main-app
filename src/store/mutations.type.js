@@ -10,6 +10,7 @@ export const SET_ACTIVE_TAB = 'setActiveTab';
 //plus.module
 export const SET_PAGE = 'setPage';
 export const SET_PLUS_READY = 'setPlusReady';
+export const SET_DEVICE_INFO = 'setDeviceInfo';
 
 
 //auth.module
@@ -21,9 +22,24 @@ export const SET_USER = 'setUser';
 export const SET_SUB_PAGES = 'setSubPages';
 export const SET_CHILDREN_LINKS = 'setChildrenLinks';
 
+//socket.module
+export const SET_SOCKET_CONNECTING = 'setSocketConnecting';
+export const SET_SOCKET_CONNECTED = 'setSocketConnected';
 
+//news.module
 export const SET_NEWS = 'setNews';
 export const SET_ARTICLE_NEWS = 'setArticleNews';
+
+//notices.module
+export const SET_NOTICES = 'setNotices';
+
+//phone.module
+export const SET_AREA = 'setArea';
+
+//bank.module
+export const SET_BANK_CODES = 'setBankCodes';
+export const SET_BANK_INFOES = 'setBankInfoes';
+
 
 export const SET_CATEGORY = 'setCategory';
 export const SET_CATEGORIES = 'setCategories';

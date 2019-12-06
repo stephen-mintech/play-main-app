@@ -1,7 +1,9 @@
 <template>
    <van-overlay :show="loading" >
       <div class="wrapper" @click.stop>
-         <van-loading :color="loadingUI.color" />
+         <van-loading :color="loadingUI.color" >
+            {{ text }}
+         </van-loading>
       </div>
    </van-overlay>
 </template>
@@ -14,7 +16,8 @@ Vue.use(Loading).use(Overlay);
 export default {
    name: 'MaskLoading',
    props: {
-      loading: Boolean
+      loading: Boolean,
+      text: String
    },
    data() {
       return {

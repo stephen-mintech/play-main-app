@@ -1,8 +1,9 @@
 import BaseService from '@/common/baseService';
 import Jwt from '@/common/jwt';
+import OAuthService from '@/services/oauth.service';
 import AuthService from '@/services/auth.service';
 
-import { CHECK_AUTH, LOGIN, LOGOUT, REFRESH_TOKEN } from '../actions.type';
+import { CHECK_AUTH, OAUTH_LOGIN, LOGIN, LOGOUT, REFRESH_TOKEN } from '../actions.type';
 import { SET_AUTH, PURGE_AUTH, 
    SET_USER, SET_LOADING 
 } from '../mutations.type';
@@ -16,9 +17,16 @@ const getters = {
    currentUser(state) {
      return state.user;
    },
+   token(state) {
+      return Jwt.getToken();
+   },
    phoneConfirmed(state) {
       if(!state.user) return false;
       return true;
+   },
+   isAdminUser(state) {
+      if(!state.user) return false;
+      return state.user.Status === '管理員';
    }
 };
 
@@ -27,17 +35,36 @@ const actions = {
       return new Promise((resolve) => {
          let accessToken = Jwt.getToken();
          if(accessToken) {
-            BaseService.setHeader();
-            let claims = Jwt.getClaims();
-            context.commit(SET_USER, {
-               id: claims.id,
-               name: claims.sub
-            }); 
+            BaseService.setHeader(accessToken);
+            context.commit(SET_USER, JSON.parse(accessToken)); 
             resolve(true);
          }else {
             context.commit(PURGE_AUTH);
             resolve(false);
          }
+      });
+   },
+   [OAUTH_LOGIN](context, credentials) {
+      context.commit(SET_LOADING, true);
+      return new Promise((resolve, reject) => {
+         OAuthService.login(credentials)
+         .then(data => {
+            let result = Utils.resolveOkData(data);
+            if(result.status) {
+               context.commit(SET_AUTH, {
+                  token: JSON.stringify(result.content),
+                  refreshToken: ''
+               });
+            }else context.commit(PURGE_AUTH);
+            
+            resolve(result.status);
+         })
+         .catch(error => {
+            reject(Utils.resolveErrorData(error));
+         })
+         .finally(() => { 
+            context.commit(SET_LOADING, false);
+         })
       });
    },
    [LOGIN](context, credentials) {
@@ -98,16 +125,7 @@ const mutations = {
       state.user = user;
    },
    [SET_AUTH](state, model) {
-      
       Jwt.saveToken(model.token, model.refreshToken);
-
-      let claims = Jwt.getClaims();
-      console.log(claims);
-      state.user = {
-         id: claims.id,
-         name: claims.sub
-      };
-      
    },
    [PURGE_AUTH](state) {
       state.user = null;

@@ -36,7 +36,6 @@ export default {
    },
    methods: {
 		pageEventHandler(e) {
-         console.log('app pageEventHandler', e);
          Utils.pageEventHandler(this, e);
       },
       init(active = true) {

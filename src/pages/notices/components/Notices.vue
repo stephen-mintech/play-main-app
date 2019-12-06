@@ -20,8 +20,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import PageManager from 'page-manager';
-import { GO_TO_PAGE } from '@/store/actions.type';
+import { FETCH_NOTICES, GO_TO_PAGE } from '@/store/actions.type';
 import { Panel, Cell, CellGroup, Icon } from 'vant';
 Vue.use(Panel).use(Cell).use(CellGroup).use(Icon);
 
@@ -66,7 +65,13 @@ export default {
    },
    methods: {
       init() {
-         
+         this.$store
+         .dispatch(FETCH_NOTICES)
+         .then(notices => {
+            
+         }).catch(error => {
+            console.log(error);
+         })
       },
       onMenuSelected(item) {
          console.log(item);

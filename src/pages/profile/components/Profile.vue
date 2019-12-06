@@ -32,7 +32,7 @@
          </van-cell-group>
 
          <Spacer />
-         <van-button type="primary" round size="large">保存</van-button>
+         <van-button @click="onSubmit" type="primary" round size="large">保存</van-button>
          
       </div>
    </div>
@@ -67,7 +67,7 @@ export default {
       };
    },
    computed: {
-      ...mapGetters(['page'])
+      ...mapGetters(['page', 'currentUser'])
    },
    created() {
 
@@ -82,13 +82,17 @@ export default {
    },
    methods: {
       init() {
-         
+         this.user = { ...this.currentUser };
+         console.log('user', this.user);
       },
       goBack() {
 			this.$store.dispatch(GO_BACK);
       },
       onColorSelected(item) {
          this.selectedColor = { ...item };
+      },
+      onSubmit() {
+         console.log('onSubmit');
       }
       
    }

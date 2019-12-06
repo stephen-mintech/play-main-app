@@ -29,7 +29,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { LOGIN, GO_TO_PAGE } from '@/store/actions.type';
+import { OAUTH_LOGIN, LOGIN, GO_TO_PAGE } from '@/store/actions.type';
 
 import { Cell, CellGroup, Image, Toast } from 'vant';
 Vue.use(Cell).use(CellGroup).use(Image).use(Toast);
@@ -62,19 +62,22 @@ export default {
    methods: {
       login(item) {
          let model = {
-            email: 'traders.com.tw@gmail.com',
-            password: 'TopSecret'
+            key: '112041503553332005309',
+            from: 'Google',
+            uuid: ''
          };
          this.$store
-         .dispatch(LOGIN, model)
-         .then(() => {
-            this.onLoginSuccess();
+         .dispatch(OAUTH_LOGIN, model)
+         .then(status => {
+            if(status) this.onLoginSuccess();
+            else Toast.fail('登入失敗');
          }).catch(error => {
             console.log(error);
             Toast.fail('登入失敗');
          })
       },
       onLoginSuccess() {
+         console.log('onLoginSuccess');
          this.$store.dispatch(GO_TO_PAGE,  { name: 'index' });
       }
    }

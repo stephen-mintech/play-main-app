@@ -1,14 +1,22 @@
 import { IS_PLUS } from '@/config';
 import Jwt from '@/common/jwt';
-import { PLUS_READY, CHECK_AUTH, INIT, GO_TO_PAGE, REFRESH_TOKEN,
-   ACTIVE_WEBVIEW, UN_ACTIVE_WEBVIEW 
+import { PLUS_READY, CHECK_AUTH, INIT, GO_TO_PAGE,
+   REFRESH_TOKEN, SOCKET_CONNECTING, SOCKET_CONNECTED,
+   BBIM_MESSAGE, ACTIVE_WEBVIEW, UN_ACTIVE_WEBVIEW 
 } from '@/store/actions.type';
+import { SET_INIT_COMPLETED } from '@/store/mutations.type';
 import { FOR_ALL, GUEST_ONLY, USER_ONLY, ADMIN_ONLY } from '@/routes/route.type';
 import { APP_NAME, APP_UI } from '@/config';
+
+import Vue from 'vue';
+import { Toast } from 'vant';
+Vue.use(Toast);
 
 const config = {
    statusbar: APP_UI.statusbarColor,
 };
+
+
 
 const setStatusBarBg = (color, style) => {
    // 设置系统状态栏背景
@@ -17,13 +25,14 @@ const setStatusBarBg = (color, style) => {
 }
 
 export const onPageCreated = (vm) => {
-   
    if(IS_PLUS){
       if(!Utils.isPlus())  throw new Error('Plus Not Found');
    }
 
    let page = Routes.findPage(vm.name);
    if(!page) Utils.pageNotFound(vm.name);
+
+   vm.$store.commit(SET_INIT_COMPLETED, false);
 
    if(IS_PLUS) {
       if(vm.$store.getters.plusReady){
@@ -101,9 +110,8 @@ const refreshToken = (vm, page) => {
       next(vm, page);
    }).catch(error => {
       console.log(error);
-      redirect(vm, { name: 'login' }, { returnPage: page});
+      redirect(vm, { name: 'login' }, { returnPage: page });
    })
-
 }
 
 
@@ -112,12 +120,27 @@ const refreshToken = (vm, page) => {
 export const pageEventHandler = (vm, e) => {
 
    let name = e.detail.name;
+   console.log('name', name);
    if(name === ACTIVE_WEBVIEW) {
       vm.init(true);
    }else if(name === UN_ACTIVE_WEBVIEW) {
       vm.init(false);
-   } 
-   else {
+   }else if(name === BBIM_MESSAGE) {
+      console.log('BBIM_MESSAGE in global');
+      let data = e.detail.data;
+      vm.$store.dispatch(data.key, data.data); 
+      
+   }else if(name === SOCKET_CONNECTING) {
+      vm.$store.dispatch(SOCKET_CONNECTING);
+      Toast.loading({
+         duration: 0,
+         message: '伺服器連線中',
+         forbidClick: true
+       });
+   }else if(name === SOCKET_CONNECTED) {
+      vm.$store.dispatch(SOCKET_CONNECTED);
+   }else {
+   
       console.log('unhadled event');
    }
 

@@ -74,6 +74,7 @@ const actions = {
       }
    },
    [SELECT_TAB](context, page) {
+      console.log(SELECT_TAB);
       context.commit(SET_ACTIVE_TAB, page);
       if(IS_PLUS) {
          context.dispatch(PLUS_SELECT_TAB, page);
@@ -104,6 +105,7 @@ const mutations = {
       state.tabPages = tabPages;
    },
    [SET_ACTIVE_TAB](state, item) {
+      console.log(SET_ACTIVE_TAB, item);
       state.activeTab = item;
    }
 };

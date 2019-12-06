@@ -2,8 +2,8 @@ import axios from 'axios';
 import { buildQuery } from '@/utils';
 
 const setHeader = (token) => {
-	if(token) axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-	else axios.defaults.headers.common['Authorization'] = null;	
+	if(token) axios.defaults.headers.common['Server_Token'] = encodeURIComponent(token);
+	else axios.defaults.headers.common['Server_Token'] = null;	
 }
 
 const fetch = (url, params) => new Promise((resolve, reject) => {

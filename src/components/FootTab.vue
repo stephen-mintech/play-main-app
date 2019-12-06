@@ -36,20 +36,20 @@ export default {
 			activeTab: state => state.app.activeTab
 		}),
 	},
-	created() {
-		
-	},
 	beforeMount(){
-		let active = this.tabPages.findIndex(item => item.name === this.activeTab.name);
-		if(active >= 0) this.active = active
-		
+		this.init();
 	},
 	methods: {
+		init() {
+			let active = this.tabPages.findIndex(item => item.name === this.activeTab.name);
+			if(active >= 0) this.active = active;
+		},
 		getInfoCount(item) {
 			if(item.name === 'notices') return 3;
 			return '';
 		},
 		onSelected(page) {
+			
 			if(page.name === this.activeTab.name) return;
 			
 			this.$store.dispatch(SELECT_TAB, page);

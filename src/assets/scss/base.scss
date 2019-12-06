@@ -35,6 +35,12 @@
 .card-content {
   background-color: $content-bg-color
 }
+.overlay-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
 
 .block-title {
   margin: 0;
@@ -140,7 +146,12 @@
 .margin-10 {
   margin : 10px;
 }
-
+.mt-10 {
+  margin-top : 10px;
+}
+.mbtm-10 {
+  margin-bottom : 10px;
+}
 .mr-10 {
   margin-right : 10px;
 }

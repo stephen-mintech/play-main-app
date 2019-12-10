@@ -5,11 +5,11 @@ import { INIT_SOCKET, SOCKET_CONNECTING, SOCKET_CONNECTED,
    SOCKET_SEND, BBIM_MESSAGE, CLOSE_SOCKET, SHOW_INDEX 
 } from '@/store/actions.type';
 
-import { SET_SOCKET_CONNECTING, SET_SOCKET_CONNECTED
+import { SET_SOCKET_INITIALIZED, SET_SOCKET_CONNECTING, SET_SOCKET_CONNECTED
 } from '@/store/mutations.type';
 
 const initialState = {
-
+   initialized: false,
    connecting: false,
    connected: false
 };
@@ -29,6 +29,7 @@ const actions = {
       _context = context;
       if(!socketService){
          socketService = new SocketService(url, uuid, token);
+         context.commit(SET_SOCKET_INITIALIZED);
          
          socketService.on(BBIM_MESSAGE, (data) => {
             _context.dispatch(BBIM_MESSAGE, data);
@@ -87,6 +88,9 @@ const actions = {
 
 
 const mutations = {
+   [SET_SOCKET_INITIALIZED](state) {
+      state.initialized = true;
+   },
    [SET_SOCKET_CONNECTING](state, val) {
       state.connecting = val;
    },

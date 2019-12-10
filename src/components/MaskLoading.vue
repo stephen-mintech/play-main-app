@@ -1,7 +1,7 @@
 <template>
    <van-overlay :show="loading" >
       <div class="wrapper" @click.stop>
-         <van-loading :color="loadingUI.color" >
+         <van-loading>
             {{ text }}
          </van-loading>
       </div>
@@ -21,7 +21,7 @@ export default {
    },
    data() {
       return {
-         loadingUI: LOADING_UI
+         
       };
    }
 }

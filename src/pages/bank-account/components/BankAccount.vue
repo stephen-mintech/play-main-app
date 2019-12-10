@@ -59,7 +59,7 @@ export default {
       };
    },
    computed: {
-      ...mapGetters(['page', 'currentUser']),
+      ...mapGetters(['page', 'currentUser', 'phoneConfirmed']),
    },
    created() {
       Bus.$on(BANK_INFOES_FETCHED, () => {
@@ -73,6 +73,7 @@ export default {
    },
    methods: {
       init() {
+         
          this.fetchData();
       },
       fetchData() {

@@ -24,9 +24,6 @@ export const PULL_REFRESH_UI = {
    color: '#eb2000'
 };
 
-export const LOADING_UI = {
-   color: '#1989fa'
-};
 
 export const NAME_COLORS = [
    { SN: 0, color: 'black' },

@@ -139,6 +139,7 @@ export const pageEventHandler = (vm, e) => {
        });
    }else if(name === SOCKET_CONNECTED) {
       vm.$store.dispatch(SOCKET_CONNECTED);
+      Toast.clear();
    }else {
    
       console.log('unhadled event');

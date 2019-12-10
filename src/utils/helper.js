@@ -1,5 +1,7 @@
 export const removeWhiteSpaces = (strVal) => strVal.replace(/\s/g,'');
 
+export const numbersOnly = (val) => !(/\D/.test(val));
+
 export const isSmallScreen = () => window.innerWidth < 991;
 
 export const tryParseInt = (val) => val ? parseInt(val) : 0;

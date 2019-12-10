@@ -54,7 +54,7 @@ const actions = {
       else window.history.back();
    },
    [TO_BIND_PHONE_PAGE](context) {
-      let page = Routes.findPage('profile');
+      let page = Routes.findPage('bind-phone');
       context.dispatch(GO_TO_PAGE, page);
    }
 };

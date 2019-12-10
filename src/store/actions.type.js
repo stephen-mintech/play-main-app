@@ -43,6 +43,7 @@ export const OPEN_CHILD_PAGE = 'openChildPage';
 
 //bbim
 export const GET_BANK_INFO = 'getBankInfo';
+export const GET_MY_CERT = 'getMyCert';
 
 //news.module
 export const FETCH_NEWS = 'fetchNews';
@@ -54,10 +55,16 @@ export const GET_NOTICE = 'getNotice';
 
 //phone.module
 export const FETCH_AREA = 'fetchArea';
+export const SEND_VCODE = 'sendVCode';
+export const SUBMIT_PHONE_BIND = 'submitPhoneBind';
 
 //bank.module
 export const FETCH_BANK_INFOES = 'fetchBankInfoes';
 export const BANK_INFOES_FETCHED = 'bankInfoesFetched';
+
+//cert.module
+export const FETCH_CERT_INFOES = 'fetchCertInfoes';
+export const CERT_INFOES_FETCHED = 'certInfoesFetched';
 
 export const FETCH_CATEGORIES = 'fetchCategories';
 export const GET_CATEGORY = 'getCategory';

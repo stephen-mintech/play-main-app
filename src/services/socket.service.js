@@ -1,6 +1,8 @@
 import { EventEmitter } from 'events';
 
-import { SOCKET_CONNECTING, SOCKET_CONNECTED, BBIM_MESSAGE } from '@/store/actions.type';
+import { SOCKET_CONNECTING, SOCKET_CONNECTED, BBIM_MESSAGE,
+   GET_MY_CERT
+} from '@/store/actions.type';
 
 class SocketService extends EventEmitter {
    constructor(url, uuid, token) {
@@ -71,6 +73,7 @@ class SocketService extends EventEmitter {
    
 
    send(page, cmd, param) {
+      console.log('send', cmd);
       let data = {
          cmd, 
          param

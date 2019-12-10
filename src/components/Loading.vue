@@ -1,19 +1,26 @@
 <template>
-   <div style="text-align: center;">
-      <van-loading :color="loadingUI.color" />
+   <div style="text-align: center; padding-top:10px;">
+      <van-loading type="spinner" size="20px">
+         {{ text }}
+      </van-loading>
    </div>
 </template>
 
 <script>
-import { LOADING_UI } from '@/config';
 import { Loading } from 'vant';
 Vue.use(Loading);
 
 export default {
    name: 'Loading',
+   props: {
+      text: {
+         type: String,
+         default: '加載中...'
+      }
+   },
    data() {
       return {
-         loadingUI: LOADING_UI
+         
       };
    }
 }

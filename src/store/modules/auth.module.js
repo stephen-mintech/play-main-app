@@ -22,7 +22,8 @@ const getters = {
    },
    phoneConfirmed(state) {
       if(!state.user) return false;
-      return true;
+      if(state.user.Phone) return true;
+      return false;
    },
    isAdminUser(state) {
       if(!state.user) return false;

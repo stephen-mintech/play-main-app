@@ -2,6 +2,7 @@ import { FOR_ALL, GUEST_ONLY, USER_ONLY, ADMIN_ONLY } from './route.type';
 const DEFAULT_PAGE_NAME = 'home';
 
 var applinks = [
+  
    {
       name: 'album',
       view: 'album.html',

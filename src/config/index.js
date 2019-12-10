@@ -7,7 +7,7 @@ export const SOCKET_URL = {
 
 export const APP_NAME = '傾心陪玩';
 
-export const IS_PLUS = true;
+export const IS_PLUS = false;
 
 export * from './auth';
 export * from './ui';

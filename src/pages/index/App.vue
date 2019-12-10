@@ -7,7 +7,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { INDEX_EVENT, INIT_COMPLETED, INIT_SOCKET, CLOSE_SOCKET,
+import { INDEX_EVENT, INIT_COMPLETED, INIT_SOCKET, 
 	SOCKET_CONNECTING, SOCKET_CONNECTED, SOCKET_SEND,
 	SELECT_TAB, ACTIVE_WEBVIEW 	
 } from '@/store/actions.type';
@@ -24,7 +24,8 @@ export default {
 	},
 	data() {
 		return {
-			name: 'index'			
+			name: 'index',
+			socketInit: 0
 		};
 	},
 	computed: {
@@ -53,9 +54,15 @@ export default {
 		});
 
 		Bus.$on(SOCKET_CONNECTED, () => {
-			let homePage = Routes.findPage('home');	
-			this.$store.dispatch(SELECT_TAB, homePage);
-			this.$refs.footTab.init();
+			
+			if(!this.socketInit) {
+				let homePage = Routes.findPage('home');	
+				this.$store.dispatch(SELECT_TAB, homePage);
+				this.$refs.footTab.init();
+			}
+
+			this.socketInit += 1;
+			
 		});
 		
 	},

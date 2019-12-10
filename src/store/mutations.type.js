@@ -23,6 +23,7 @@ export const SET_SUB_PAGES = 'setSubPages';
 export const SET_CHILDREN_LINKS = 'setChildrenLinks';
 
 //socket.module
+export const SET_SOCKET_INITIALIZED = 'setSocketInitialized';
 export const SET_SOCKET_CONNECTING = 'setSocketConnecting';
 export const SET_SOCKET_CONNECTED = 'setSocketConnected';
 
@@ -35,10 +36,15 @@ export const SET_NOTICES = 'setNotices';
 
 //phone.module
 export const SET_AREA = 'setArea';
+export const SET_SENDING_VCODE = 'setSendingVCode';
+export const SET_PHONE_BINDING = 'setPhoneBinding';
 
 //bank.module
 export const SET_BANK_CODES = 'setBankCodes';
 export const SET_BANK_INFOES = 'setBankInfoes';
+
+//cert.module
+export const SET_CERT_INFOES = 'setCertInfoes';
 
 
 export const SET_CATEGORY = 'setCategory';
